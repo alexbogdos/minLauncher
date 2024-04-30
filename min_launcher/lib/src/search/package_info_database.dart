@@ -1,5 +1,6 @@
-import 'package:min_launcher/src/search/package_info.dart';
 import 'package:sqflite/sqflite.dart';
+
+import 'package_info.dart';
 
 class PackageInfoDatabase {
   final String _databasePath = "installed_packages.db";
@@ -29,7 +30,6 @@ class PackageInfoDatabase {
     await db.execute('''
       CREATE TABLE package_info(
         package_name TEXT PRIMARY KEY,
-        name TEXT
         score INTEGER,
         last_accessed INTEGER
       )

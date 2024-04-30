@@ -4,7 +4,7 @@
     "description": "The title of the application"
   },
 
-  "searchTitle": "Search",
+  "searchTitle": "Αναζήτηση",
   "@searchTitle": {
     "description": "The title of the search view"
   }

@@ -4,19 +4,26 @@ import 'package:installed_apps/installed_apps.dart';
 import 'package:min_launcher/src/search/package_info.dart';
 import 'package:min_launcher/src/search/package_info_database.dart';
 
-class SearchService {
+class PackageSearchService {
   final PackageInfoDatabase _database = PackageInfoDatabase();
-  final Set<PackageInfo> _packages = <PackageInfo>{};
+  final List<PackageInfo> _packages = <PackageInfo>[];
+
+  // FIXME: Limit access to info. Remove PackageInfo, update directly to db.
+  List<PackageInfo> get packages => _packages;
+
+  /// Launch package by packageName
+  Future<void> launchPackage(String packageName) async {
+    await InstalledApps.startApp(packageName);
+  }
 
   /// Load packages from the database and the device.
   Future<void> loadPackages() async {
-
     // Load stored apps from database
     Set<PackageInfo>? storedApps = await _database.getAllPackages();
 
     // Load apps from device
     Set<AppInfo> apps =
-        (await InstalledApps.getInstalledApps(false, false)).toSet();
+        (await InstalledApps.getInstalledApps(true, false)).toSet();
 
     // If database empty,
     if (storedApps == null) {
