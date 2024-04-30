@@ -1,2 +1,2 @@
-# minimal-launcher
+# minLauncher
  Minimal Android home launcher.
