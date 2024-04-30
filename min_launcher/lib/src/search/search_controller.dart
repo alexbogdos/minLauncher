@@ -7,7 +7,7 @@ class SearchController with ChangeNotifier {
   final SearchService _searchService;
 
   Future<void> loadInstalledPackages() async {
-    await _searchService
+    await _searchService.loadPackages();
 
     notifyListeners();
   }
