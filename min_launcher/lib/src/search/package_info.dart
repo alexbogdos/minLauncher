@@ -13,8 +13,6 @@ class PackageInfo {
   int? score;
   int? lastAccessed;
 
-
-
   Map<String, dynamic> toMap() {
     return {
       'package_name': packageName,

@@ -11,12 +11,12 @@ class PackageInfoDatabase {
       return _database!;
     }
 
-    _database = await initDatabase();
+    _database = await _initDatabase();
     return _database!;
   }
 
   // Initialize database. Create if it doesn't exist
-  Future<Database> initDatabase() async {
+  Future<Database> _initDatabase() async {
     return await openDatabase(
       _databasePath,
       version: 1,

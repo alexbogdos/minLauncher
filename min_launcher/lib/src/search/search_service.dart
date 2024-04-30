@@ -10,7 +10,6 @@ class SearchService {
 
   /// Load packages from the database and the device.
   Future<void> loadPackages() async {
-    await _database.initDatabase();
 
     // Load stored apps from database
     Set<PackageInfo>? storedApps = await _database.getAllPackages();
