@@ -7,5 +7,15 @@
   "searchTitle": "Search",
   "@searchTitle": {
     "description": "The title of the search view"
+  },
+
+  "loadingPackages": "Loading installed apps..",
+  "@searchTitle": {
+    "description": "Loading installed apps message"
+  },
+
+  "errorLoadingPackages": "Couldn't load installed apps",
+  "@searchTitle": {
+    "description": "Error message when loading packages failed"
   }
 }

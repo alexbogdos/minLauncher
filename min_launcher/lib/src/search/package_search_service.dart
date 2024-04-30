@@ -11,35 +11,40 @@ class PackageSearchService {
   // FIXME: Limit access to info. Remove PackageInfo, update directly to db.
   List<PackageInfo> get packages => _packages;
 
+  Future<void> initService() async {
+    await _database.initDatabase();
+  }
+
   /// Launch package by packageName
   Future<void> launchPackage(String packageName) async {
+    PackageInfo package = _packages.where((element) => element.packageName == packageName).first;
+    package.lastAccessed = DateTime.now().millisecondsSinceEpoch;
     await InstalledApps.startApp(packageName);
   }
 
   /// Load packages from the database and the device.
-  Future<void> loadPackages() async {
+  Future<List<PackageInfo>> loadPackages({bool useIcons = false}) async {
     // Load stored apps from database
     Set<PackageInfo>? storedApps = await _database.getAllPackages();
 
     // Load apps from device
-    Set<AppInfo> apps =
-        (await InstalledApps.getInstalledApps(true, false)).toSet();
+    Set<AppInfo> apps = (await InstalledApps.getInstalledApps(true, useIcons, "")).toSet();
 
     // If database empty,
     if (storedApps == null) {
       // Create PackageInfo from device apps
-      _packages.addAll(apps.map((app) => PackageInfo.fromAppInfo(app)));
+      _packages.addAll(apps.map((app) => PackageInfo.fromApp(app)));
 
       // Store device apps in database
       _packages.map((packageInfo) async =>
           await _database.insertPackageInfo(packageInfo));
 
-      return;
+      return _packages;
     }
 
     // Merge device and stored data for each app and add to _packages
     for (AppInfo app in apps) {
-      final PackageInfo info = PackageInfo.fromAppInfo(app);
+      final PackageInfo info = PackageInfo.fromApp(app);
       try {
         final PackageInfo storedInfo = storedApps
             .where((element) => element.packageName == info.packageName)
@@ -61,5 +66,7 @@ class PackageSearchService {
     // Remove from the database all apps that where not on the device
     storedApps
         .map((e) async => await _database.removePackageInfo(e.packageName));
+
+    return _packages;
   }
 }

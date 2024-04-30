@@ -25,10 +25,7 @@ class MyApp extends StatelessWidget {
     // The ListenableBuilder Widget listens to the SettingsController for changes.
     // Whenever the user updates their settings, the MaterialApp is rebuilt.
     return ListenableBuilder(
-      listenable: Listenable.merge([
-        settingsController,
-        searchController,
-      ]),
+      listenable: settingsController,
       builder: (BuildContext context, Widget? child) {
         return MaterialApp(
           // Providing a restorationScopeId allows the Navigator built by the
@@ -50,6 +47,7 @@ class MyApp extends StatelessWidget {
             Locale('en', ''), // English, no country code
             Locale('el', ''), // Greek, no country code
           ],
+          locale: const Locale('el', ''),
 
           // Use AppLocalizations to configure the correct application title
           // depending on the user's locale.
@@ -62,10 +60,9 @@ class MyApp extends StatelessWidget {
           // Define a light and dark color theme. Then, read the user's
           // preferred ThemeMode (light, dark, or system default) from the
           // SettingsController to display the correct theme.
-          theme: settingsController.themeData,
-          darkTheme: settingsController.themeData.copyWith(
-            brightness: Brightness.dark,
-          ),
+          theme: ThemeData().copyWith(primaryColor: Colors.orangeAccent),
+          darkTheme: ThemeData.dark(useMaterial3: true)
+              .copyWith(primaryColor: Colors.orangeAccent),
           themeMode: settingsController.themeMode,
 
           // Define a function to handle named routes in order to support
@@ -79,7 +76,10 @@ class MyApp extends StatelessWidget {
                     return SettingsView(controller: settingsController);
                   case PackageSearchView.routeName:
                   default:
-                    return PackageSearchView(controller: searchController);
+                    return PackageSearchView(
+                      controller: searchController,
+                      useIcons: settingsController.useIcons,
+                    );
                 }
               },
             );

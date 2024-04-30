@@ -10,10 +10,16 @@ class PackageSearchController with ChangeNotifier {
 
   List<PackageInfo> get packages => _searchService.packages;
 
-  Future<void> loadInstalledPackages() async {
-    await _searchService.loadPackages();
+  Future<void> init() async {
+    await _searchService.initService();
+  }
 
+  Future<bool> loadPackages({bool useIcons = false}) async {
+    debugPrint("START");
+    await _searchService.loadPackages(useIcons: useIcons);
+    debugPrint("END");
     notifyListeners();
+    return true;
   }
 
   Future<void> launchPackage(String packageName) async {

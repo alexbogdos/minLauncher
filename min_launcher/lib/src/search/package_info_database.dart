@@ -4,21 +4,11 @@ import 'package_info.dart';
 
 class PackageInfoDatabase {
   final String _databasePath = "installed_packages.db";
-  Database? _database;
-
-  // Database getter
-  Future<Database> get database async {
-    if (_database != null) {
-      return _database!;
-    }
-
-    _database = await _initDatabase();
-    return _database!;
-  }
+  late Database _db;
 
   // Initialize database. Create if it doesn't exist
-  Future<Database> _initDatabase() async {
-    return await openDatabase(
+  Future<void> initDatabase() async {
+    _db = await openDatabase(
       _databasePath,
       version: 1,
       onCreate: _createDb,
@@ -38,15 +28,13 @@ class PackageInfoDatabase {
 
   // Insert a package info into the database
   Future<void> insertPackageInfo(PackageInfo packageInfo) async {
-    Database db = await database;
-    await db.insert('package_info', packageInfo.toMap(),
+    await _db.insert('package_info', packageInfo.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   // Get info for the packageName passed
   Future<PackageInfo?> getPackageInfo(String packageName) async {
-    Database db = await database;
-    List<Map<String, dynamic>> maps = await db.query(
+    List<Map<String, dynamic>> maps = await _db.query(
       'package_info',
       where: 'package_name = ?',
       whereArgs: [packageName],
@@ -58,15 +46,13 @@ class PackageInfoDatabase {
   }
 
   Future<void> removePackageInfo(String packageName) async {
-    Database db = await database;
-    await db.delete('package_info',
+    await _db.delete('package_info',
         where: 'package_name = ?', whereArgs: [packageName]);
   }
 
   // Get all packages in database
   Future<Set<PackageInfo>?> getAllPackages() async {
-    Database db = await database;
-    List<Map<String, dynamic>> maps = await db.query(
+    List<Map<String, dynamic>> maps = await _db.query(
       'package_info',
     );
     if (maps.isNotEmpty) {

@@ -23,6 +23,9 @@ void main() async {
   // Set up the SearchController
   final searchController = PackageSearchController(PackageSearchService());
 
+  // Initialize the SearchController
+  await searchController.init();
+
   // Run the app and pass in the SettingsController. The app listens to the
   // SettingsController for changes, then passes it further down to the
   // SettingsView.

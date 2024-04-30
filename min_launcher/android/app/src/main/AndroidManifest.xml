@@ -1,4 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- used for loading device's applications -->
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>
+
     <application
         android:label="minLauncher"
         android:name="${applicationName}"

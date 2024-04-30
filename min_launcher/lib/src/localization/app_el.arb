@@ -7,5 +7,15 @@
   "searchTitle": "Αναζήτηση",
   "@searchTitle": {
     "description": "The title of the search view"
+  },
+
+  "loadingPackages": "Έυρεση εγκατεστημένων εφαρμογών..",
+  "@searchTitle": {
+    "description": "Loading installed apps message"
+  },
+
+  "errorLoadingPackages": "Δεν βρέθηκαν εγκατεστημένες εφαρμογές",
+  "@searchTitle": {
+    "description": "Error message when loading packages failed"
   }
 }

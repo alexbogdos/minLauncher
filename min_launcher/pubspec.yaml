@@ -15,6 +15,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   installed_apps: ^1.5.0
+  shared_preferences_android: ^2.2.2
   sqflite: ^2.3.3
 
 dev_dependencies:

@@ -20,6 +20,8 @@ class SettingsController with ChangeNotifier {
   // Allow Widgets to read the user's preferred ThemeMode.
   ThemeMode get themeMode => _themeMode;
 
+  bool get useIcons => _settingsService.useIcons;
+
   ThemeData get themeData {
     return ThemeData.from(
       colorScheme: ColorScheme.fromSeed(seedColor: Colors.orangeAccent),
