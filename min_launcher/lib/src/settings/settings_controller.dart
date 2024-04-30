@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:min_launcher/src/search/package_search_controller.dart';
 
 import 'settings_service.dart';
 
@@ -8,19 +9,27 @@ import 'settings_service.dart';
 /// Controllers glue Data Services to Flutter Widgets. The SettingsController
 /// uses the SettingsService to store and retrieve user settings.
 class SettingsController with ChangeNotifier {
-  SettingsController(this._settingsService);
+  SettingsController(this._settingsService, this._searchController);
 
   // Make SettingsService a private variable so it is not used directly.
   final SettingsService _settingsService;
 
+  final PackageSearchController _searchController;
+
   // Make ThemeMode a private variable so it is not updated directly without
   // also persisting the changes with the SettingsService.
   late ThemeMode _themeMode;
+  late bool _useIcons;
 
   // Allow Widgets to read the user's preferred ThemeMode.
   ThemeMode get themeMode => _themeMode;
+  bool get useIcons => _useIcons;
 
-  bool get useIcons => _settingsService.useIcons;
+  Future<void> setUseIcons(bool newUseIcons) async {
+    await _settingsService.updateUseIcons(newUseIcons);
+    _searchController.askToLoad();
+    notifyListeners();
+  }
 
   ThemeData get themeData {
     return ThemeData.from(
@@ -34,6 +43,9 @@ class SettingsController with ChangeNotifier {
   /// settings from the service.
   Future<void> loadSettings() async {
     _themeMode = await _settingsService.themeMode();
+    _useIcons = await _settingsService.useIcons();
+
+    _searchController.askToLoad();
 
     // Important! Inform listeners a change has occurred.
     notifyListeners();

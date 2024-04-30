@@ -32,6 +32,24 @@ class PackageInfoDatabase {
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
+  Future<void> updateScore(String packageName, int score) async {
+    await _db.update(
+      'package_info',
+      {'score': score},
+      where: 'packageName = ?',
+      whereArgs: [packageName],
+    );
+  }
+
+  Future<void> updateLastAccessed(String packageName, int lastAccessed) async {
+    await _db.update(
+      'package_info',
+      {'last_accessed': lastAccessed},
+      where: 'packageName = ?',
+      whereArgs: [packageName],
+    );
+  }
+
   // Get info for the packageName passed
   Future<PackageInfo?> getPackageInfo(String packageName) async {
     List<Map<String, dynamic>> maps = await _db.query(

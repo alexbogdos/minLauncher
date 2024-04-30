@@ -7,10 +7,10 @@ import 'package:flutter/material.dart';
 /// you'd like to store settings on a web server, use the http package.
 class SettingsService {
   /// Load app icons alongside app names
-  bool get useIcons => false;
+  Future<bool> useIcons() async => false;
 
   /// Persists the user's preferred ThemeMode to local or remote storage.
-  Future<void> updateUseIcons(bool use) async {
+  Future<void> updateUseIcons(bool newUseIcons) async {
 
   }
 

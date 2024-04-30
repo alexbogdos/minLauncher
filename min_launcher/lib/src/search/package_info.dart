@@ -5,7 +5,7 @@ import 'package:installed_apps/app_info.dart';
 class PackageInfo {
   PackageInfo({
     required this.packageName,
-    required this.name,
+    this.name,
     this.icon,
     this.score,
     this.lastAccessed,
@@ -14,7 +14,7 @@ class PackageInfo {
   }
 
   String packageName;
-  String name;
+  String? name;
   late bool hasIcon;
   Uint8List? icon;
   int? score;
@@ -33,7 +33,6 @@ class PackageInfo {
   factory PackageInfo.fromMap(Map<String, dynamic> map) {
     return PackageInfo(
       packageName: map['package_name'],
-      name: map['name'],
       score: map['score'],
       lastAccessed: map['last_accessed'],
     );

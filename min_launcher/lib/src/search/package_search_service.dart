@@ -17,8 +17,12 @@ class PackageSearchService {
 
   /// Launch package by packageName
   Future<void> launchPackage(String packageName) async {
-    PackageInfo package = _packages.where((element) => element.packageName == packageName).first;
+    PackageInfo package =
+        _packages.where((element) => element.packageName == packageName).first;
     package.lastAccessed = DateTime.now().millisecondsSinceEpoch;
+
+    await _database.updateLastAccessed(packageName, DateTime.now().millisecondsSinceEpoch);
+
     await InstalledApps.startApp(packageName);
   }
 
@@ -28,10 +32,13 @@ class PackageSearchService {
     Set<PackageInfo>? storedApps = await _database.getAllPackages();
 
     // Load apps from device
-    Set<AppInfo> apps = (await InstalledApps.getInstalledApps(true, useIcons, "")).toSet();
+    Set<AppInfo> apps =
+        (await InstalledApps.getInstalledApps(true, useIcons, "")).toSet();
 
     // If database empty,
     if (storedApps == null) {
+      _packages.clear();
+
       // Create PackageInfo from device apps
       _packages.addAll(apps.map((app) => PackageInfo.fromApp(app)));
 
@@ -43,6 +50,8 @@ class PackageSearchService {
     }
 
     // Merge device and stored data for each app and add to _packages
+    _packages.clear();
+
     for (AppInfo app in apps) {
       final PackageInfo info = PackageInfo.fromApp(app);
       try {
