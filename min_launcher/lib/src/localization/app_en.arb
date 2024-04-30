@@ -1,0 +1,6 @@
+{
+  "appTitle": "min_launcher",
+  "@appTitle": {
+    "description": "The title of the application"
+  }
+}
