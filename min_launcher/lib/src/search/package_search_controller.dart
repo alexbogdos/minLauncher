@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package_info.dart';
 import 'package_search_service.dart';
 
-class PackageSearchController with ChangeNotifier {
+class PackageSearchController {
   PackageSearchController(this._searchService);
 
   final PackageSearchService _searchService;
+  int loading = 0;
 
   List<PackageInfo> get packages => _searchService.packages;
 
@@ -14,12 +15,11 @@ class PackageSearchController with ChangeNotifier {
     await _searchService.initService();
   }
 
-  Future<bool> loadPackages({bool useIcons = false}) async {
+  Future<List<PackageInfo>> loadPackages({bool useIcons = false}) async {
     debugPrint("START");
-    await _searchService.loadPackages(useIcons: useIcons);
+    final List<PackageInfo> list = await _searchService.loadPackages(useIcons: useIcons);
     debugPrint("END");
-    notifyListeners();
-    return true;
+    return list;
   }
 
   Future<void> launchPackage(String packageName) async {
