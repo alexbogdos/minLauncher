@@ -37,6 +37,22 @@ class SettingsService {
     await _update('locale', newLocale.languageCode);
   }
 
+  Future<TextAlign> appsAlign() async {
+    switch (await _get('apps_align', 'right')) {
+      case 'left':
+        return TextAlign.left;
+      case 'center':
+        return TextAlign.center;
+      case 'right':
+      default:
+        return TextAlign.right;
+    }
+  }
+
+  Future<void> updateAppsAlign(TextAlign newTextAlign) async {
+    await _update('apps_align', newTextAlign.name.toLowerCase());
+  }
+
   /// Loads the User's preferred ThemeMode from local or remote storage.
   Future<ThemeMode> themeMode() async {
     switch (await _get('theme_mode', 'system')) {
@@ -61,9 +77,9 @@ class SettingsService {
       );
 
   Future<String> _get(String key, String defaultValue) async {
-    String? value = await _database.getValue<String?>(key);
+    String? value = await _database.getValue(key);
     if (value == null) {
-      debugPrint("Default $key: $value");
+      debugPrint("Default $key: $defaultValue");
       await _database.insert(key, defaultValue);
       return defaultValue;
     }

@@ -26,6 +26,7 @@ class SettingsController with ChangeNotifier {
     _themeData = await _settingsService.themeData();
     _useIcons = await _settingsService.useIcons();
     _locale = await _settingsService.locale();
+    _appsAlign = await _settingsService.appsAlign();
 
     _searchController.askToLoad();
 
@@ -39,19 +40,21 @@ class SettingsController with ChangeNotifier {
   late ThemeData _themeData;
   late bool _useIcons;
   late Locale _locale;
+  late TextAlign _appsAlign;
 
   // Allow Widgets to read the user's preferred Data.
   ThemeMode get themeMode => _themeMode;
   ThemeData get themeData => _themeData;
   bool get useIcons => _useIcons;
   Locale get locale => _locale;
+  TextAlign get appsAlign => _appsAlign;
 
 
   Future<void> updateUseIcons(bool? newUseIcons) async {
     if (newUseIcons == null) return;
     if (newUseIcons == _useIcons) return;
     _useIcons = newUseIcons;
-    _searchController.askToLoad();
+    if (newUseIcons) _searchController.askToLoad();
     notifyListeners();
     await _settingsService.updateUseIcons(newUseIcons);
   }
@@ -62,6 +65,14 @@ class SettingsController with ChangeNotifier {
     _locale = newLocale;
     notifyListeners();
     await _settingsService.updateLocale(newLocale);
+  }
+
+  Future<void> updateAppsAlign(TextAlign? newAppsAlign) async {
+    if (newAppsAlign == null) return;
+    if (newAppsAlign == _appsAlign) return;
+    _appsAlign = newAppsAlign;
+    notifyListeners();
+    await _settingsService.updateAppsAlign(newAppsAlign);
   }
 
   /// Update and persist the ThemeMode based on the user's selection.

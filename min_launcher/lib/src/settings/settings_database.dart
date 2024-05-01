@@ -42,14 +42,14 @@ class SettingsDatabase {
   }
 
   // Get the value of a setting
-  Future<T?> getValue<T>(String title) async {
+  Future<String?> getValue(String title) async {
     List<Map<String, dynamic>> maps = await _db.query(
       'settings',
       where: 'title = ?',
       whereArgs: [title],
     );
     if (maps.isNotEmpty) {
-      return maps.first['value'] as T?;
+      return maps.first['value'].toString();
     }
     return null;
   }

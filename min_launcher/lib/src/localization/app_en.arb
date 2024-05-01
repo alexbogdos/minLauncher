@@ -23,5 +23,10 @@
 
     "settingsToggleLocaleTitle": "Language",
 
-    "settingsToggleUseIconsTitle": "Show app icons"
+    "settingsToggleUseIconsTitle": "Show app icons",
+
+    "settingsToggleAppsAlignTitle": "Apps Align",
+    "settingsToggleAppsAlignValueLeft": "Left",
+    "settingsToggleAppsAlignValueCenter": "Center",
+    "settingsToggleAppsAlignValueRight": "Right"
 }

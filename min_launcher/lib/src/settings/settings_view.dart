@@ -83,6 +83,32 @@ class SettingsView extends StatelessWidget {
                 onChanged: controller.updateUseIcons,
               ),
             ),
+            SettingsEntry(
+              title: AppLocalizations.of(context)!.settingsToggleAppsAlignTitle,
+              child: DropdownButton<TextAlign>(
+                // Read the selected themeMode from the controller
+                value: controller.appsAlign,
+                // Call the updateThemeMode method any time the user selects a theme.
+                onChanged: controller.updateAppsAlign,
+                items:  [
+                  DropdownMenuItem(
+                    value: TextAlign.left,
+                    child: Text(AppLocalizations.of(context)!
+                        .settingsToggleAppsAlignValueLeft),
+                  ),
+                  DropdownMenuItem(
+                    value: TextAlign.center,
+                    child: Text(AppLocalizations.of(context)!
+                        .settingsToggleAppsAlignValueCenter),
+                  ),
+                  DropdownMenuItem(
+                    value: TextAlign.right,
+                    child: Text(AppLocalizations.of(context)!
+                        .settingsToggleAppsAlignValueRight),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),

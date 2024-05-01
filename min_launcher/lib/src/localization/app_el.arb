@@ -23,5 +23,10 @@
 
     "settingsToggleLocaleTitle": "Γλώσσα",
 
-    "settingsToggleUseIconsTitle": "Εφμάνιση εικονιδίων εφαρμογών"
+    "settingsToggleUseIconsTitle": "Εφμάνιση εικονιδίων εφαρμογών",
+
+    "settingsToggleAppsAlignTitle": "Στοίχιση Εφαρμογών",
+    "settingsToggleAppsAlignValueLeft": "Αριστερή",
+    "settingsToggleAppsAlignValueCenter": "Κεντρική",
+    "settingsToggleAppsAlignValueRight": "Δεξία"
 }
