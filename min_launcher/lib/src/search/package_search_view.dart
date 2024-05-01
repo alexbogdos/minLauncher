@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../settings/settings_view.dart';
 import 'package_search_controller.dart';
 import 'package_info.dart';
-import 'search_list_view.dart';
+import 'package_search_list_view.dart';
 
 /// Search View. Search for application to launch.
 class PackageSearchView extends StatefulWidget {
@@ -47,7 +47,7 @@ class _PackageSearchViewState extends State<PackageSearchView> {
                 builder: (BuildContext context,
                     AsyncSnapshot<List<PackageInfo>> snapshot) {
                   if (snapshot.hasData) {
-                    return SearchListView(controller: widget.controller);
+                    return PackageSearchListView(controller: widget.controller);
                   } else if (snapshot.hasError) {
                     debugPrintStack(label: snapshot.error.toString(), stackTrace: snapshot.stackTrace);
                     return Center(

@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 
 import 'package_search_controller.dart';
 
-class SearchListView extends StatelessWidget {
-  const SearchListView({super.key, required this.controller});
+class PackageSearchListView extends StatelessWidget {
+  const PackageSearchListView({super.key, required this.controller});
 
   final PackageSearchController controller;
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      restorationId: 'packageSearchViewListView',
       itemCount: controller.packages.length,
       itemBuilder: (BuildContext context, int index) {
         final package = controller.packages[index];
