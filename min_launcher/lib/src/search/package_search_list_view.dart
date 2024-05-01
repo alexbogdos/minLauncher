@@ -22,10 +22,8 @@ class _PackageSearchListViewState extends State<PackageSearchListView> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        _selected = -1;
-      },
+    return RefreshIndicator(
+      onRefresh: widget.controller.reload,
       child: ListView.builder(
         restorationId: 'packageSearchViewListView',
         itemCount: widget.controller.packages.length,
@@ -47,6 +45,7 @@ class _PackageSearchListViewState extends State<PackageSearchListView> {
                   )
                 : null,
             onTap: () {
+              _selected = -1;
               widget.controller.launchPackage(package.packageName);
             },
             onLongPress: () {

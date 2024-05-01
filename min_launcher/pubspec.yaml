@@ -4,7 +4,7 @@ description: "Minimal Android home launcher."
 # Prevent accidental publishing to pub.dev.
 publish_to: 'none'
 
-version: 1.0.0+1
+version: 1.1.0+1
 
 environment:
   sdk: '>=3.3.4 <4.0.0'
@@ -15,7 +15,6 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   installed_apps: ^1.5.0
-  shared_preferences_android: ^2.2.2
   sqflite: ^2.3.3
 
 dev_dependencies:

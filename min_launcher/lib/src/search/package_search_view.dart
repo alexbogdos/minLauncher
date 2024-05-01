@@ -50,9 +50,29 @@ class _PackageSearchViewState extends State<PackageSearchView> {
                 builder: (BuildContext context,
                     AsyncSnapshot<List<PackageInfo>> snapshot) {
                   if (snapshot.hasData) {
-                    return PackageSearchListView(
-                      settings: widget.settings,
-                      controller: widget.controller,
+                    return Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24,),
+                          child: TextField(
+                            autofocus: true,
+                            showCursor: false,
+                            controller: widget.controller.textEditingController,
+                            textAlign: widget.settings.appsAlign,
+                            onChanged: widget.controller.search,
+                            style:  Theme.of(context).textTheme.titleMedium,
+                            decoration: InputDecoration(
+                              hintText: AppLocalizations.of(context)!.searchTitle,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: PackageSearchListView(
+                            settings: widget.settings,
+                            controller: widget.controller,
+                          ),
+                        ),
+                      ],
                     );
                   } else if (snapshot.hasError) {
                     debugPrintStack(
