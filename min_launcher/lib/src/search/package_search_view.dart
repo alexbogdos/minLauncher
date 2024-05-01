@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:min_launcher/src/settings/settings_controller.dart';
 
 import '../settings/settings_view.dart';
 import 'package_search_controller.dart';
@@ -10,11 +11,13 @@ import 'package_search_list_view.dart';
 class PackageSearchView extends StatefulWidget {
   const PackageSearchView({
     super.key,
+    required this.settings,
     required this.controller,
     this.useIcons = false,
   });
 
   static const routeName = '/';
+  final SettingsController settings;
   final PackageSearchController controller;
   final bool useIcons;
 
@@ -47,12 +50,18 @@ class _PackageSearchViewState extends State<PackageSearchView> {
                 builder: (BuildContext context,
                     AsyncSnapshot<List<PackageInfo>> snapshot) {
                   if (snapshot.hasData) {
-                    return PackageSearchListView(controller: widget.controller);
+                    return PackageSearchListView(
+                      settings: widget.settings,
+                      controller: widget.controller,
+                    );
                   } else if (snapshot.hasError) {
-                    debugPrintStack(label: snapshot.error.toString(), stackTrace: snapshot.stackTrace);
+                    debugPrintStack(
+                        label: snapshot.error.toString(),
+                        stackTrace: snapshot.stackTrace);
                     return Center(
                       child: Text(
-                        AppLocalizations.of(context)!.searchErrorLoadingPackages,
+                        AppLocalizations.of(context)!
+                            .searchErrorLoadingPackages,
                       ),
                     );
                   } else {
@@ -62,7 +71,8 @@ class _PackageSearchViewState extends State<PackageSearchView> {
                         children: <Widget>[
                           const CircularProgressIndicator(),
                           const SizedBox(height: 8),
-                          Text(AppLocalizations.of(context)!.searchLoadingPackages)
+                          Text(AppLocalizations.of(context)!
+                              .searchLoadingPackages)
                         ],
                       ),
                     );

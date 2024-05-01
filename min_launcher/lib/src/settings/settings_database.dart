@@ -32,7 +32,7 @@ class SettingsDatabase {
     );
   }
 
-  Future<void> update(String title, dynamic value) async {
+  Future<void> update<T>(String title, T value) async {
     await _db.update(
       'settings',
       {'value': value},
@@ -49,7 +49,7 @@ class SettingsDatabase {
       whereArgs: [title],
     );
     if (maps.isNotEmpty) {
-      return maps.first as T;
+      return maps.first['value'] as T?;
     }
     return null;
   }

@@ -17,13 +17,11 @@
     "settingsTitle": "Ρυθμίσεις",
 
     "settingsToggleThemeModeTitle": "Θέμα Εφαρμογής",
-    "settingsToggleThemeModeValueSystem": "Θέμα Συστήματος",
-    "settingsToggleThemeModeValueLight": "Ανοικτό Θέμα",
-    "settingsToggleThemeModeValueDark": "Σκοτεινό Θέμα",
+    "settingsToggleThemeModeValueSystem": "Συστήματος",
+    "settingsToggleThemeModeValueLight": "Ανοικτό",
+    "settingsToggleThemeModeValueDark": "Σκοτεινό",
 
     "settingsToggleLocaleTitle": "Γλώσσα",
-    "settingsToggleLocaleValueEn": "Αγγλικά",
-    "settingsToggleLocaleValueEl": "Ελληνικά",
 
     "settingsToggleUseIconsTitle": "Εφμάνιση εικονιδίων εφαρμογών"
 }

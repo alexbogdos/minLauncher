@@ -22,10 +22,10 @@ class SettingsController with ChangeNotifier {
   Future<void> loadSettings() async {
     await _settingsService.init();
 
-    _themeMode = await _settingsService.themeMode(_themeMode);
+    _themeMode = await _settingsService.themeMode();
     _themeData = await _settingsService.themeData();
-    _useIcons = await _settingsService.useIcons(_useIcons);
-    _locale = await _settingsService.locale(_locale);
+    _useIcons = await _settingsService.useIcons();
+    _locale = await _settingsService.locale();
 
     _searchController.askToLoad();
 

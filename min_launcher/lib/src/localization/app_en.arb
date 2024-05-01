@@ -17,13 +17,11 @@
     "settingsTitle": "Settings",
 
     "settingsToggleThemeModeTitle": "Theme mode",
-    "settingsToggleThemeModeValueSystem": "System Theme",
-    "settingsToggleThemeModeValueLight": "Light Theme",
-    "settingsToggleThemeModeValueDark": "Dark Theme",
+    "settingsToggleThemeModeValueSystem": "System",
+    "settingsToggleThemeModeValueLight": "Light",
+    "settingsToggleThemeModeValueDark": "Dark",
 
     "settingsToggleLocaleTitle": "Language",
-    "settingsToggleLocaleValueEn": "English",
-    "settingsToggleLocaleValueEl": "Light",
 
     "settingsToggleUseIconsTitle": "Show app icons"
 }

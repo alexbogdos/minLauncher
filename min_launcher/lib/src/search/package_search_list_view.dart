@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 
+import '../settings/settings_controller.dart';
 import 'package_search_controller.dart';
 
 class PackageSearchListView extends StatelessWidget {
-  const PackageSearchListView({super.key, required this.controller});
+  const PackageSearchListView({
+    super.key,
+    required this.settings,
+    required this.controller,
+  });
 
+  final SettingsController settings;
   final PackageSearchController controller;
 
   @override
@@ -18,7 +24,8 @@ class PackageSearchListView extends StatelessWidget {
         return ListTile(
             title: Text(
               "${package.name}, ${package.score ?? 0}, ${package.lastAccessed != null ? '${Duration(milliseconds: package.lastAccessedDiff).inMinutes}"' : '-'}",
-              textAlign: TextAlign.right, // TODO: Control from SettingsController
+              textAlign:
+                  TextAlign.right, // TODO: Control from SettingsController
             ),
             leading: package.hasIcon
                 ? CircleAvatar(

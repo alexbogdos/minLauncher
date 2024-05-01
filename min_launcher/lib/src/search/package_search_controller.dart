@@ -7,7 +7,7 @@ class PackageSearchController with ChangeNotifier {
   PackageSearchController(this._searchService);
 
   final PackageSearchService _searchService;
-  bool load = true;
+  bool canLoad = true;
 
   List<PackageInfo> get packages => _searchService.packages;
 
@@ -15,14 +15,13 @@ class PackageSearchController with ChangeNotifier {
     await _searchService.initService();
   }
 
-  void askToLoad() => load = true;
+  void askToLoad() => canLoad = true;
 
   Future<List<PackageInfo>> loadPackages({bool useIcons = false}) async {
-    if (!load) return _searchService.packages;
-
+    if (!canLoad) return _searchService.packages;
+    canLoad = false;
     debugPrint("Loading packages..");
     final List<PackageInfo> list = await _searchService.loadPackages(useIcons: useIcons);
-    load = false;
     debugPrint("Finished. Packages loaded");
     notifyListeners();
     return list;

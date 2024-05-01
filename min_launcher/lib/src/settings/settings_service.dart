@@ -15,34 +15,64 @@ class SettingsService {
   }
 
   /// Load app icons alongside app names
-  Future<bool> useIcons(bool defaultValue) async => await _get<bool>('use_icons', defaultValue);
-  Future<void> updateUseIcons(bool newUseIcons) async => await _update('use_icons', newUseIcons);
+  Future<bool> useIcons() async {
+    return (await _get('use_icons', 'false')) == 'true' ? true : false;
+  }
 
-  Future<Locale> locale(Locale defaultValue) async => await _get<Locale>('locale', defaultValue);
-  Future<void> updateLocale(Locale newLocale) async => await _update('locale', newLocale);
+  Future<void> updateUseIcons(bool newUseIcons) async {
+    await _update('use_icons', newUseIcons ? 'true' : 'false');
+  }
+
+  Future<Locale> locale() async {
+    switch (await _get('locale', 'en')) {
+      case 'el':
+        return const Locale('el', '');
+      case 'en':
+      default:
+        return const Locale('en', '');
+    }
+  }
+
+  Future<void> updateLocale(Locale newLocale) async {
+    await _update('locale', newLocale.languageCode);
+  }
 
   /// Loads the User's preferred ThemeMode from local or remote storage.
-  Future<ThemeMode> themeMode(ThemeMode defaultValue) async => await _get<ThemeMode>('theme_mode', defaultValue);
+  Future<ThemeMode> themeMode() async {
+    switch (await _get('theme_mode', 'system')) {
+      case 'light':
+        return ThemeMode.light;
+      case 'dark':
+        return ThemeMode.dark;
+      case 'system':
+      default:
+        return ThemeMode.system;
+    }
+  }
 
   /// Persists the user's preferred ThemeMode to local or remote storage.
-  Future<void> updateThemeMode(ThemeMode newThemeMode) async => await _update('theme_mode', newThemeMode);
+  Future<void> updateThemeMode(ThemeMode newThemeMode) async {
+    await _update('theme_mode', newThemeMode.name.toLowerCase());
+  }
 
   Future<ThemeData> themeData() async => ThemeData.from(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.orangeAccent),
         useMaterial3: true,
       );
 
-
-  Future<T> _get<T>(String key, T defaultValue) async {
-    T? value = await _database.getValue<T?>(key);
+  Future<String> _get(String key, String defaultValue) async {
+    String? value = await _database.getValue<String?>(key);
     if (value == null) {
+      debugPrint("Default $key: $value");
       await _database.insert(key, defaultValue);
       return defaultValue;
     }
+    debugPrint("Loaded $key: $value");
     return value;
   }
 
-  Future<void> _update<T>(String key, T newValue) async {
-    await _database.update(key, newValue);
+  Future<void> _update(String key, String newValue) async {
+    debugPrint("Update $key: $newValue");
+    await _database.update<String>(key, newValue);
   }
 }

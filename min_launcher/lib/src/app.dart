@@ -77,6 +77,7 @@ class MyApp extends StatelessWidget {
                   case PackageSearchView.routeName:
                   default:
                     return PackageSearchView(
+                      settings: settingsController,
                       controller: searchController,
                       useIcons: settingsController.useIcons,
                     );

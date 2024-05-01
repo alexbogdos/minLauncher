@@ -64,18 +64,14 @@ class SettingsView extends StatelessWidget {
                 value: controller.locale,
                 // Call the updateThemeMode method any time the user selects a theme.
                 onChanged: controller.updateLocale,
-                items: [
+                items: const [
                   DropdownMenuItem(
-                    value: const Locale('en', ''),
-                    child: Text(
-                      AppLocalizations.of(context)!.settingsToggleLocaleValueEn,
-                    ),
+                    value: Locale('en', ''),
+                    child: Text('English'),
                   ),
                   DropdownMenuItem(
-                    value: const Locale('el', ''),
-                    child: Text(
-                      AppLocalizations.of(context)!.settingsToggleLocaleValueEl,
-                    ),
+                    value: Locale('el', ''),
+                    child: Text('Ελληνικά'),
                   )
                 ],
               ),
