@@ -22,7 +22,7 @@ class PackageInfoDatabase {
         package_name TEXT PRIMARY KEY,
         score INTEGER,
         last_accessed INTEGER
-      )
+      );
     ''');
   }
 
@@ -36,7 +36,7 @@ class PackageInfoDatabase {
     await _db.update(
       'package_info',
       {'score': score},
-      where: 'packageName = ?',
+      where: 'package_name = ?',
       whereArgs: [packageName],
     );
   }
@@ -45,7 +45,7 @@ class PackageInfoDatabase {
     await _db.update(
       'package_info',
       {'last_accessed': lastAccessed},
-      where: 'packageName = ?',
+      where: 'package_name = ?',
       whereArgs: [packageName],
     );
   }

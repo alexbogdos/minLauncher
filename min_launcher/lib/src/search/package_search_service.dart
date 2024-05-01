@@ -17,12 +17,16 @@ class PackageSearchService {
 
   /// Launch package by packageName
   Future<void> launchPackage(String packageName) async {
-    PackageInfo package =
-        _packages.where((element) => element.packageName == packageName).first;
+    PackageInfo package = _packages.where((element) => element.packageName == packageName).first;
+
     package.lastAccessed = DateTime.now().millisecondsSinceEpoch;
 
+    // Update in database
     await _database.updateLastAccessed(packageName, DateTime.now().millisecondsSinceEpoch);
 
+    _packages.sort((a,b) => a.compareTo(b));
+
+    // Launch app
     await InstalledApps.startApp(packageName);
   }
 
@@ -43,8 +47,9 @@ class PackageSearchService {
       _packages.addAll(apps.map((app) => PackageInfo.fromApp(app)));
 
       // Store device apps in database
-      _packages.map((packageInfo) async =>
-          await _database.insertPackageInfo(packageInfo));
+      await Future.wait([
+        for (PackageInfo info in _packages) _database.insertPackageInfo(info),
+      ]);
 
       return _packages;
     }
@@ -68,13 +73,16 @@ class PackageSearchService {
         await _database.insertPackageInfo(info);
       }
       _packages.add(info);
-      storedApps
-          .removeWhere((element) => element.packageName == info.packageName);
+      storedApps.removeWhere((element) => element.packageName == info.packageName);
     }
 
     // Remove from the database all apps that where not on the device
-    storedApps
-        .map((e) async => await _database.removePackageInfo(e.packageName));
+    await Future.wait([
+      for (PackageInfo info in storedApps)
+        _database.removePackageInfo(info.packageName),
+    ]);
+
+    _packages.sort((a,b) => a.compareTo(b));
 
     return _packages;
   }

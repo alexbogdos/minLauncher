@@ -14,6 +14,14 @@ class SettingsService {
 
   }
 
+  /// Load app icons alongside app names
+  Future<Locale> locale() async => const Locale('en', '');
+
+  /// Persists the user's preferred ThemeMode to local or remote storage.
+  Future<void> updateLocale(Locale newLocale) async {
+
+  }
+
   /// Loads the User's preferred ThemeMode from local or remote storage.
   Future<ThemeMode> themeMode() async => ThemeMode.system;
 
@@ -22,4 +30,9 @@ class SettingsService {
     // Use the shared_preferences package to persist settings locally or the
     // http package to persist settings over the network.
   }
+
+  Future<ThemeData> themeData() async => ThemeData.from(
+    colorScheme: ColorScheme.fromSeed(seedColor: Colors.orangeAccent),
+    useMaterial3: true,
+  );
 }

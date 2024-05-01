@@ -9,6 +9,11 @@
     "description": "The title of the search view"
   },
 
+  "settingsTitle": "Ρυθμίσεις",
+  "@searchTitle": {
+    "description": "The title of the search view"
+  },
+
   "loadingPackages": "Έυρεση εγκατεστημένων εφαρμογών..",
   "@searchTitle": {
     "description": "Loading installed apps message"

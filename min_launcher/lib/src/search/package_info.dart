@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:installed_apps/app_info.dart';
 
-class PackageInfo {
+class PackageInfo implements Comparable {
   PackageInfo({
     required this.packageName,
     this.name,
@@ -20,7 +20,8 @@ class PackageInfo {
   int? score;
   int? lastAccessed;
 
-  int get lastAccessedDiff => (lastAccessed! - DateTime.now().millisecondsSinceEpoch).toInt();
+  int get lastAccessedDiff =>
+      (lastAccessed! - DateTime.now().millisecondsSinceEpoch).toInt();
 
   Map<String, dynamic> toMap() {
     return {
@@ -46,5 +47,25 @@ class PackageInfo {
       score: null,
       lastAccessed: null,
     );
+  }
+
+  @override
+  int compareTo(other) {
+    if (lastAccessed != null && other.lastAccessed != null) {
+      return other!.lastAccessed!.compareTo(lastAccessed!);
+    }
+
+    if (lastAccessed == null && other.lastAccessed == null) {
+      return 0;
+    }
+    else if (other.lastAccessed == null) {
+      return -1;
+    }
+    else if (lastAccessed == null) {
+      return 1;
+    }
+
+    return 0;
+
   }
 }

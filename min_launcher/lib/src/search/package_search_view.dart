@@ -26,41 +26,49 @@ class _PackageSearchViewState extends State<PackageSearchView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      restorationId: 'packageSearchView',
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.searchTitle),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () {
-              Navigator.restorablePushNamed(context, SettingsView.routeName);
-            },
-          ),
-        ],
-      ),
-      body: FutureBuilder<List<PackageInfo>>(
-        future: widget.controller.loadPackages(useIcons: widget.useIcons),
-        builder:
-            (BuildContext context, AsyncSnapshot<List<PackageInfo>> snapshot) {
-          List<Widget> children;
-          if (snapshot.hasData) {
-            return SearchListView(controller: widget.controller);
-          } else if (snapshot.hasError) {
-            return Text(AppLocalizations.of(context)!.errorLoadingPackages);
-          } else {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  const CircularProgressIndicator(),
-                  const SizedBox(height: 8),
-                  Text(AppLocalizations.of(context)!.loadingPackages)
-                ],
-              ),
-            );
-          }
-        },
-      ),
-    );
+        restorationId: 'packageSearchView',
+        appBar: AppBar(
+          title: Text(AppLocalizations.of(context)!.searchTitle),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.settings),
+              onPressed: () {
+                Navigator.restorablePushNamed(context, SettingsView.routeName);
+              },
+            ),
+          ],
+        ),
+        body: ListenableBuilder(
+            listenable: widget.controller,
+            builder: (BuildContext context, Widget? child) {
+              return FutureBuilder<List<PackageInfo>>(
+                future:
+                    widget.controller.loadPackages(useIcons: widget.useIcons),
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<PackageInfo>> snapshot) {
+                  if (snapshot.hasData) {
+                    return SearchListView(controller: widget.controller);
+                  } else if (snapshot.hasError) {
+                    debugPrintStack(label: snapshot.error.toString(), stackTrace: snapshot.stackTrace);
+                    return Center(
+                      child: Text(
+                        AppLocalizations.of(context)!.errorLoadingPackages,
+                      ),
+                    );
+                  } else {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          const CircularProgressIndicator(),
+                          const SizedBox(height: 8),
+                          Text(AppLocalizations.of(context)!.loadingPackages)
+                        ],
+                      ),
+                    );
+                  }
+                },
+              );
+            }));
   }
 }

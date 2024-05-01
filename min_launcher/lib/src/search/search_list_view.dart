@@ -16,7 +16,9 @@ class SearchListView extends StatelessWidget {
 
         return ListTile(
             title: Text(
-                "${package.name}, ${package.score ?? 0}, ${package.lastAccessed != null ? '${Duration(milliseconds: package.lastAccessedDiff).inMinutes}"' : '-'}"),
+              "${package.name}, ${package.score ?? 0}, ${package.lastAccessed != null ? '${Duration(milliseconds: package.lastAccessedDiff).inMinutes}"' : '-'}",
+              textAlign: TextAlign.right, // TODO: Control from SettingsController
+            ),
             leading: package.hasIcon
                 ? CircleAvatar(
                     // Display the Flutter Logo image asset.

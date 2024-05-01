@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'settings_controller.dart';
 
@@ -17,7 +18,7 @@ class SettingsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: Text(AppLocalizations.of(context)!.settingsTitle),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
@@ -56,8 +57,30 @@ class SettingsView extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                Text("Locale:", style: Theme.of(context).textTheme.bodyLarge,),
+                DropdownButton<Locale>(
+                  // Read the selected themeMode from the controller
+                  value: controller.locale,
+                  // Call the updateThemeMode method any time the user selects a theme.
+                  onChanged: controller.updateLocale,
+                  items: const [
+                    DropdownMenuItem(
+                      value: Locale('en', ''),
+                      child: Text("English"),
+                    ),
+                    DropdownMenuItem(
+                      value: Locale('el', ''),
+                      child: Text("Greek"),
+                    )
+                  ]
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
                 Text("Show app icons:", style: Theme.of(context).textTheme.bodyLarge,),
-                Switch(value: controller.useIcons, onChanged: controller.setUseIcons),
+                Switch(value: controller.useIcons, onChanged: controller.updateUseIcons),
               ],
             ),
           ],
