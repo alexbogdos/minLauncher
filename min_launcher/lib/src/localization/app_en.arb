@@ -1,26 +1,29 @@
 {
-  "appTitle": "minLauncher",
-  "@appTitle": {
-    "description": "The title of the application"
-  },
+    "@_APP_GLOBALS": {},
 
-  "searchTitle": "Search",
-  "@searchTitle": {
-    "description": "The title of the search view"
-  },
+    "appTitle": "minLauncher",
 
-  "settingsTitle": "Settings",
-  "@searchTitle": {
-    "description": "The title of the search view"
-  },
 
-  "loadingPackages": "Loading installed apps..",
-  "@searchTitle": {
-    "description": "Loading installed apps message"
-  },
+    "@_SEARCH_VIEW": {},
 
-  "errorLoadingPackages": "Couldn't load installed apps",
-  "@searchTitle": {
-    "description": "Error message when loading packages failed"
-  }
+    "searchTitle": "Search",
+
+    "searchLoadingPackages": "Loading installed apps..",
+    "searchErrorLoadingPackages": "Couldn't load installed apps",
+
+
+    "@_SETTINGS_VIEW": {},
+
+    "settingsTitle": "Settings",
+
+    "settingsToggleThemeModeTitle": "Theme mode",
+    "settingsToggleThemeModeValueSystem": "System Theme",
+    "settingsToggleThemeModeValueLight": "Light Theme",
+    "settingsToggleThemeModeValueDark": "Dark Theme",
+
+    "settingsToggleLocaleTitle": "Language",
+    "settingsToggleLocaleValueEn": "English",
+    "settingsToggleLocaleValueEl": "Light",
+
+    "settingsToggleUseIconsTitle": "Show app icons"
 }

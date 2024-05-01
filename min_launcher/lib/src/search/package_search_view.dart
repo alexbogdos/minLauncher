@@ -52,7 +52,7 @@ class _PackageSearchViewState extends State<PackageSearchView> {
                     debugPrintStack(label: snapshot.error.toString(), stackTrace: snapshot.stackTrace);
                     return Center(
                       child: Text(
-                        AppLocalizations.of(context)!.errorLoadingPackages,
+                        AppLocalizations.of(context)!.searchErrorLoadingPackages,
                       ),
                     );
                   } else {
@@ -62,7 +62,7 @@ class _PackageSearchViewState extends State<PackageSearchView> {
                         children: <Widget>[
                           const CircularProgressIndicator(),
                           const SizedBox(height: 8),
-                          Text(AppLocalizations.of(context)!.loadingPackages)
+                          Text(AppLocalizations.of(context)!.searchLoadingPackages)
                         ],
                       ),
                     );

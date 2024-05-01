@@ -1,26 +1,29 @@
 {
-  "appTitle": "minLauncher",
-  "@appTitle": {
-    "description": "The title of the application"
-  },
+    "@_APP_GLOBALS": {},
 
-  "searchTitle": "Αναζήτηση",
-  "@searchTitle": {
-    "description": "The title of the search view"
-  },
+    "appTitle": "minLauncher",
 
-  "settingsTitle": "Ρυθμίσεις",
-  "@searchTitle": {
-    "description": "The title of the search view"
-  },
 
-  "loadingPackages": "Έυρεση εγκατεστημένων εφαρμογών..",
-  "@searchTitle": {
-    "description": "Loading installed apps message"
-  },
+    "@_SEARCH_VIEW": {},
 
-  "errorLoadingPackages": "Δεν βρέθηκαν εγκατεστημένες εφαρμογές",
-  "@searchTitle": {
-    "description": "Error message when loading packages failed"
-  }
+    "searchTitle": "Αναζήτηση",
+
+    "searchLoadingPackages": "Έυρεση εγκατεστημένων εφαρμογών..",
+    "searchErrorLoadingPackages": "Δεν βρέθηκαν εγκατεστημένες εφαρμογές",
+
+
+    "@_SETTINGS_VIEW": {},
+
+    "settingsTitle": "Ρυθμίσεις",
+
+    "settingsToggleThemeModeTitle": "Θέμα Εφαρμογής",
+    "settingsToggleThemeModeValueSystem": "Θέμα Συστήματος",
+    "settingsToggleThemeModeValueLight": "Ανοικτό Θέμα",
+    "settingsToggleThemeModeValueDark": "Σκοτεινό Θέμα",
+
+    "settingsToggleLocaleTitle": "Γλώσσα",
+    "settingsToggleLocaleValueEn": "Αγγλικά",
+    "settingsToggleLocaleValueEl": "Ελληνικά",
+
+    "settingsToggleUseIconsTitle": "Εφμάνιση εικονιδίων εφαρμογών"
 }
