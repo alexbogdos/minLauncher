@@ -20,10 +20,12 @@ class SettingsController with ChangeNotifier {
   /// local database or the internet. The controller only knows it can load the
   /// settings from the service.
   Future<void> loadSettings() async {
-    _themeMode = await _settingsService.themeMode();
+    await _settingsService.init();
+
+    _themeMode = await _settingsService.themeMode(_themeMode);
     _themeData = await _settingsService.themeData();
-    _useIcons = await _settingsService.useIcons();
-    _locale = await _settingsService.locale();
+    _useIcons = await _settingsService.useIcons(_useIcons);
+    _locale = await _settingsService.locale(_locale);
 
     _searchController.askToLoad();
 
@@ -38,45 +40,27 @@ class SettingsController with ChangeNotifier {
   late bool _useIcons;
   late Locale _locale;
 
-  // Allow Widgets to read the user's preferred ThemeMode.
+  // Allow Widgets to read the user's preferred Data.
   ThemeMode get themeMode => _themeMode;
   ThemeData get themeData => _themeData;
   bool get useIcons => _useIcons;
   Locale get locale => _locale;
 
+
   Future<void> updateUseIcons(bool? newUseIcons) async {
     if (newUseIcons == null) return;
-
-    // Do not perform any work if new and old ThemeMode are identical
     if (newUseIcons == _useIcons) return;
-
-    // Otherwise, store the new ThemeMode in memory
     _useIcons = newUseIcons;
-
     _searchController.askToLoad();
-
-    // Important! Inform listeners a change has occurred.
     notifyListeners();
-
-    // Persist the changes to a local database or the internet using the
-    // SettingService.
     await _settingsService.updateUseIcons(newUseIcons);
   }
 
   Future<void> updateLocale(Locale? newLocale) async {
     if (newLocale == null) return;
-
-    // Do not perform any work if new and old ThemeMode are identical
     if (newLocale == _locale) return;
-
-    // Otherwise, store the new ThemeMode in memory
     _locale = newLocale;
-
-    // Important! Inform listeners a change has occurred.
     notifyListeners();
-
-    // Persist the changes to a local database or the internet using the
-    // SettingService.
     await _settingsService.updateLocale(newLocale);
   }
 
