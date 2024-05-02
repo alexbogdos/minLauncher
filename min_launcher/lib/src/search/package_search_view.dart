@@ -53,7 +53,7 @@ class _PackageSearchViewState extends State<PackageSearchView> {
                     return Column(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24,),
+                          padding: const EdgeInsets.fromLTRB(16, 16, 20, 16),
                           child: TextField(
                             autofocus: true,
                             showCursor: false,

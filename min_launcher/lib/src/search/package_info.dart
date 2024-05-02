@@ -60,7 +60,21 @@ class PackageInfo implements Comparable {
 
   @override
   int compareTo(other) {
-    return (other.frecency - frecency).sign.toInt();
+    int diff = (other.frecency - frecency).sign.toInt();
+    if (diff != 0) {
+      return diff;
+    }
+    else if (other.name != null && name != null) {
+      return name!.compareTo(other.name!);
+    }
+    return 0;
+  }
+
+  int compareNameTo(other) {
+    if (other.name != null && name != null) {
+      return name!.compareTo(other.name!);
+    }
+    return 0;
   }
 
   Map<String, dynamic> toMap() {

@@ -34,7 +34,7 @@ class _PackageSearchListViewState extends State<PackageSearchListView> {
             visualDensity: VisualDensity.compact,
             selected: _selected == index,
             title: Text(
-              "${package.name}, ${package.score ?? 0}, ${package.lastAccessed != null ? '${Duration(milliseconds: package.lastAccessedDiff).inMinutes}"' : '-'}",
+              "${package.name}",
               textAlign: widget.settings.appsAlign,
             ),
             leading: widget.settings.useIcons && package.hasIcon

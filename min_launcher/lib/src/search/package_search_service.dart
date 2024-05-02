@@ -27,9 +27,6 @@ class PackageSearchService {
 
     // Launch app
     await InstalledApps.startApp(packageName);
-
-    // Sort packages
-    _packages.sort((a,b) => a.compareTo(b));
   }
 
   /// Load packages from the database and the device.
@@ -38,8 +35,7 @@ class PackageSearchService {
     Set<PackageInfo>? storedApps = await _database.getAllPackages();
 
     // Load apps from device
-    Set<AppInfo> apps =
-        (await InstalledApps.getInstalledApps(true, useIcons, "")).toSet();
+    Set<AppInfo> apps = (await InstalledApps.getInstalledApps(true, useIcons, "")).toSet();
 
     // If database empty,
     if (storedApps == null) {
@@ -52,6 +48,8 @@ class PackageSearchService {
       await Future.wait([
         for (PackageInfo info in _packages) _database.insertPackageInfo(info),
       ]);
+
+      _packages.sort((a, b) => a.compareNameTo(b));
 
       return _packages;
     }
@@ -75,7 +73,8 @@ class PackageSearchService {
         await _database.insertPackageInfo(info);
       }
       _packages.add(info);
-      storedApps.removeWhere((element) => element.packageName == info.packageName);
+      storedApps
+          .removeWhere((element) => element.packageName == info.packageName);
     }
 
     // Remove from the database all apps that where not on the device
@@ -84,7 +83,8 @@ class PackageSearchService {
         _database.removePackageInfo(info.packageName),
     ]);
 
-    _packages.sort((a,b) => a.compareTo(b));
+    _packages.sort((a, b) => a.compareNameTo(b));
+    // _packages.sort((a,b) => a.compareTo(b));
 
     return _packages;
   }

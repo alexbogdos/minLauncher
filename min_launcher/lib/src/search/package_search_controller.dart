@@ -28,7 +28,7 @@ class PackageSearchController with ChangeNotifier {
     notifyListeners();
   }
 
-  void search(String? value) {
+  Future<void> search(String? value) async {
     query.clear();
     if (value == null || value == '') {
       notifyListeners();
@@ -41,9 +41,13 @@ class PackageSearchController with ChangeNotifier {
       }
     }
 
+    query.sort((a, b) => a.compareTo(b));
+
     notifyListeners();
 
-    if (query.length == 1) launchFirst();
+    await Future.delayed(const Duration(milliseconds: 50), () {
+      if (query.length == 1) launchFirst();
+    });
   }
 
   /// Matching Algorithm
@@ -70,9 +74,6 @@ class PackageSearchController with ChangeNotifier {
     textEditingController.clear();
     query.clear();
     await _searchService.launchPackage(packageName);
-    for (PackageInfo package in _searchService.packages) {
-      debugPrint(package.toString());
-    }
     notifyListeners();
   }
 }
