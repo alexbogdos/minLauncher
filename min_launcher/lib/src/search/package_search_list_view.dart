@@ -23,7 +23,7 @@ class _PackageSearchListViewState extends State<PackageSearchListView> {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: widget.controller.reload,
+      onRefresh: () async => widget.controller.focusNode.requestFocus(),
       child: ListView.builder(
         restorationId: 'packageSearchViewListView',
         itemCount: widget.controller.packages.length,

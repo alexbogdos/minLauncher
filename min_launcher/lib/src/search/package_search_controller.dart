@@ -10,6 +10,7 @@ class PackageSearchController with ChangeNotifier {
   bool canLoad = true;
   List<PackageInfo> query = List<PackageInfo>.empty(growable: true);
   TextEditingController textEditingController = TextEditingController();
+  FocusNode focusNode = FocusNode();
 
   List<PackageInfo> get packages {
     if (query.isNotEmpty || textEditingController.value.text.isNotEmpty) return query;
