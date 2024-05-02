@@ -59,11 +59,12 @@ class _PackageSearchViewState extends State<PackageSearchView> {
                             showCursor: false,
                             controller: widget.controller.textEditingController,
                             textAlign: widget.settings.appsAlign,
-                            onChanged: widget.controller.search,
                             style:  Theme.of(context).textTheme.titleMedium,
                             decoration: InputDecoration(
                               hintText: AppLocalizations.of(context)!.searchTitle,
                             ),
+                            onChanged: widget.controller.search,
+                            onEditingComplete: widget.controller.launchFirst,
                           ),
                         ),
                         Expanded(

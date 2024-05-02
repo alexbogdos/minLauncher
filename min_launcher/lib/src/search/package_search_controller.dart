@@ -36,11 +36,19 @@ class PackageSearchController with ChangeNotifier {
     }
 
     for (PackageInfo info in _searchService.packages) {
-      if (info.name!.toLowerCase().contains(value.toLowerCase())) {
+      if (matchAlgorithm(info, value)) {
         query.add(info);
       }
     }
+
     notifyListeners();
+
+    if (query.length == 1) launchFirst();
+  }
+
+  /// Matching Algorithm
+  bool matchAlgorithm(PackageInfo info, String text) {
+    return info.name!.toLowerCase().contains(text.toLowerCase());
   }
 
   Future<List<PackageInfo>> loadPackages({bool useIcons = false}) async {
@@ -53,8 +61,18 @@ class PackageSearchController with ChangeNotifier {
     return list;
   }
 
+  Future<void> launchFirst() async {
+    PackageInfo? package = packages.firstOrNull;
+    if (package != null) await launchPackage(package.packageName);
+  }
+
   Future<void> launchPackage(String packageName) async {
+    textEditingController.clear();
+    query.clear();
     await _searchService.launchPackage(packageName);
+    for (PackageInfo package in _searchService.packages) {
+      debugPrint(package.toString());
+    }
     notifyListeners();
   }
 }

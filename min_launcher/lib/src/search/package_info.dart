@@ -20,8 +20,48 @@ class PackageInfo implements Comparable {
   int? score;
   int? lastAccessed;
 
-  int get lastAccessedDiff =>
-      (lastAccessed! - DateTime.now().millisecondsSinceEpoch).toInt();
+  int get lastAccessedDiff => (lastAccessed! - DateTime.now().millisecondsSinceEpoch).toInt();
+
+  void launch() {
+    lastAccessed = DateTime.now().millisecondsSinceEpoch;
+    if (score != null) {
+      score = score! + 1;
+    } else {
+      score = 1;
+    }
+  }
+
+  bool get active => score != null && lastAccessed != null;
+
+  double get frecency {
+    if (!active) return 0;
+
+    Duration diff = Duration(
+        milliseconds: DateTime.now().millisecondsSinceEpoch - lastAccessed!);
+
+    if (diff.inHours < 1) {
+      // Within the last hour
+      return score! * 4;
+    } else if (diff.inDays < 1) {
+      // Within the last day
+      return score! * 2;
+    } else if (diff.inDays < 8) {
+      // Within the last week
+      return score! / 2;
+    } else {
+      return score! / 4;
+    }
+  }
+
+  @override
+  String toString() {
+    return "$name, \t$frecency";
+  }
+
+  @override
+  int compareTo(other) {
+    return (other.frecency - frecency).sign.toInt();
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -47,25 +87,5 @@ class PackageInfo implements Comparable {
       score: null,
       lastAccessed: null,
     );
-  }
-
-  @override
-  int compareTo(other) {
-    if (lastAccessed != null && other.lastAccessed != null) {
-      return other!.lastAccessed!.compareTo(lastAccessed!);
-    }
-
-    if (lastAccessed == null && other.lastAccessed == null) {
-      return 0;
-    }
-    else if (other.lastAccessed == null) {
-      return -1;
-    }
-    else if (lastAccessed == null) {
-      return 1;
-    }
-
-    return 0;
-
   }
 }

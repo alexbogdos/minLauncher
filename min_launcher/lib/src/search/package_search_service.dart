@@ -19,15 +19,17 @@ class PackageSearchService {
   Future<void> launchPackage(String packageName) async {
     PackageInfo package = _packages.where((element) => element.packageName == packageName).first;
 
-    package.lastAccessed = DateTime.now().millisecondsSinceEpoch;
+    package.launch();
 
     // Update in database
-    await _database.updateLastAccessed(packageName, DateTime.now().millisecondsSinceEpoch);
-
-    _packages.sort((a,b) => a.compareTo(b));
+    await _database.updateLastAccessed(packageName, package.lastAccessed!);
+    await _database.updateScore(packageName, package.score!);
 
     // Launch app
     await InstalledApps.startApp(packageName);
+
+    // Sort packages
+    _packages.sort((a,b) => a.compareTo(b));
   }
 
   /// Load packages from the database and the device.
