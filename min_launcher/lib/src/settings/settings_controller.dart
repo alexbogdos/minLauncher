@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:min_launcher/src/search/package_search_controller.dart';
 
 import 'settings_service.dart';
 

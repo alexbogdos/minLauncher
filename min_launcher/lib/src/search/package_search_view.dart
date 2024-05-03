@@ -69,9 +69,21 @@ class _PackageSearchViewState extends State<PackageSearchView> {
                             ),
                           ),
                           Expanded(
-                            child: PackageSearchListView(
-                              settings: widget.settings,
-                              controller: widget.controller,
+                            child: GestureDetector(
+                              behavior: HitTestBehavior.translucent,
+                              onVerticalDragUpdate: (details) {
+                                int sensitivity = 8;
+                                // Swipe down.
+                                if (details.delta.dy > sensitivity) {
+                                  widget.controller.resetAndFocus();
+                                }
+                              },
+                              child: AbsorbPointer(
+                                child: PackageSearchListView(
+                                  settings: widget.settings,
+                                  controller: widget.controller,
+                                ),
+                              ),
                             ),
                           ),
                         ],

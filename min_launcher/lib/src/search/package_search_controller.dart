@@ -11,6 +11,7 @@ class PackageSearchController with ChangeNotifier {
 
   final PackageSearchService _searchService;
   bool _canLoad = true;
+  bool _start = true;
   final List<PackageInfo> _query = List<PackageInfo>.empty(growable: true);
   late Timer _timer;
   static const Duration _refreshDuration = Duration(seconds: 30);
@@ -26,7 +27,6 @@ class PackageSearchController with ChangeNotifier {
 
   Future<void> init() async {
     await _searchService.initService();
-    _timer = Timer.periodic(_refreshDuration, (Timer timer) => _refresh);
   }
 
   void requestLoad() => _canLoad = true;
@@ -69,6 +69,11 @@ class PackageSearchController with ChangeNotifier {
   }
 
   Future<List<PackageInfo>> loadPackages() async {
+    if (_start) {
+      _timer = Timer.periodic(_refreshDuration, (Timer timer) => _refresh());
+      _start = false;
+    }
+
     if (!_canLoad) return _searchService.packages;
     _canLoad = false;
     debugPrint("Loading packages..");
@@ -85,13 +90,15 @@ class PackageSearchController with ChangeNotifier {
 
   Future<void> launchPackage(String packageName) async {
     await _searchService.launchPackage(packageName);
-    resetAndFocus();
+    await resetAndFocus();
     notifyListeners();
   }
 
-  void resetAndFocus() {
-    textEditingController.clear();
+  Future<void> resetAndFocus() async {
     _query.clear();
-    focusNode.requestFocus();
+    await Future.delayed(const Duration(milliseconds: 250), () {
+      textEditingController.clear();
+      focusNode.requestFocus();
+    });
   }
 }
