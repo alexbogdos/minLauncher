@@ -13,6 +13,8 @@ class SettingsController with ChangeNotifier {
   // Make SettingsService a private variable so it is not used directly.
   final SettingsService _settingsService;
 
+  /// Currently passed by the PackageSearchController. When called 
+  /// requests to load the packages.
   final void Function()? requestLoad;
 
   /// Load the user's settings from the SettingsService. It may load from a
@@ -33,7 +35,7 @@ class SettingsController with ChangeNotifier {
     notifyListeners();
   }
 
-  // Make ThemeMode a private variable so it is not updated directly without
+  // Make the settings private variables so they are not updated directly without
   // also persisting the changes with the SettingsService.
   late ThemeMode _themeMode;
   late ThemeData _themeData;
@@ -48,7 +50,7 @@ class SettingsController with ChangeNotifier {
   Locale get locale => _locale;
   TextAlign get appsAlign => _appsAlign;
 
-
+  /// Update and persist the Use Icons based on the user's selection.
   Future<void> updateUseIcons(bool? newUseIcons) async {
     if (newUseIcons == null) return;
     if (newUseIcons == _useIcons) return;
@@ -57,6 +59,7 @@ class SettingsController with ChangeNotifier {
     await _settingsService.updateUseIcons(newUseIcons);
   }
 
+  /// Update and persist the Locale based on the user's selection.
   Future<void> updateLocale(Locale? newLocale) async {
     if (newLocale == null) return;
     if (newLocale == _locale) return;
@@ -65,6 +68,7 @@ class SettingsController with ChangeNotifier {
     await _settingsService.updateLocale(newLocale);
   }
 
+  /// Update and persist the Apps Align based on the user's selection.
   Future<void> updateAppsAlign(TextAlign? newAppsAlign) async {
     if (newAppsAlign == null) return;
     if (newAppsAlign == _appsAlign) return;
@@ -86,8 +90,7 @@ class SettingsController with ChangeNotifier {
     // Important! Inform listeners a change has occurred.
     notifyListeners();
 
-    // Persist the changes to a local database or the internet using the
-    // SettingService.
+    // Persist the changes to the local database SettingService.
     await _settingsService.updateThemeMode(newThemeMode);
   }
 }

@@ -4,7 +4,7 @@ class SettingsDatabase {
   final String _databasePath = "settings.db";
   late Database _db;
 
-  // Initialize database. Create if it doesn't exist
+  /// Initialize database. Create if it doesn't exist.
   Future<void> open() async {
     _db = await openDatabase(
       _databasePath,
@@ -13,7 +13,7 @@ class SettingsDatabase {
     );
   }
 
-  // Create Database
+  /// Create Database.
   Future<void> _createDb(Database db, int version) async {
     await db.execute('''
       CREATE TABLE settings (
@@ -23,7 +23,7 @@ class SettingsDatabase {
     ''');
   }
 
-  // Insert a setting into the database
+  /// Insert a setting into the database.
   Future<void> insert(String title, dynamic value) async {
     await _db.insert(
       'settings',
@@ -32,6 +32,7 @@ class SettingsDatabase {
     );
   }
 
+  /// Update a setting's value.
   Future<void> update<T>(String title, T value) async {
     await _db.update(
       'settings',
@@ -41,7 +42,7 @@ class SettingsDatabase {
     );
   }
 
-  // Get the value of a setting
+  /// Get the value of a setting.
   Future<String?> getValue(String title) async {
     List<Map<String, dynamic>> maps = await _db.query(
       'settings',

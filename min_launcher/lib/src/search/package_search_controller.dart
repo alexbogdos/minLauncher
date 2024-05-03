@@ -54,8 +54,13 @@ class PackageSearchController with ChangeNotifier {
     _query.clear();
     
     // The given name must be the result of the user
-    // pressing backspace. Do nothing
-    if (name == null || name == '') return;
+    // pressing backspace. Call notifyListeners() to update
+    // the PackageSearchView and show the complete package list
+    // after clearing the query.
+    if (name == null || name == '') {
+      notifyListeners();
+      return;
+    }
 
     // Add all packages that match the name to the query list
     _query.addAll(_searchService.packages.where((element) => matchAlgorithm(element, name)));

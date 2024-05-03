@@ -10,19 +10,22 @@ import 'settings_database.dart';
 class SettingsService {
   final SettingsDatabase _database = SettingsDatabase();
 
+  /// Initialize the SettingsService by opening the settings database.
   Future<void> init() async {
     await _database.open();
   }
 
-  /// Load app icons alongside app names
+  /// Loads the User's preferred Use Icons from the database.
   Future<bool> useIcons() async {
     return (await _get('use_icons', 'false')) == 'true' ? true : false;
   }
 
+  /// Persists the user's preferred Use Icons to the database.
   Future<void> updateUseIcons(bool newUseIcons) async {
     await _update('use_icons', newUseIcons ? 'true' : 'false');
   }
 
+  /// Loads the User's preferred Locale from the database.
   Future<Locale> locale() async {
     switch (await _get('locale', 'en')) {
       case 'el':
@@ -33,10 +36,13 @@ class SettingsService {
     }
   }
 
+  /// Persists the user's preferred Locale to the database.
   Future<void> updateLocale(Locale newLocale) async {
     await _update('locale', newLocale.languageCode);
   }
 
+  /// Apps Align: The alignment of applications names on the search view.
+  /// Loads the User's preferred Apps Align from the database.
   Future<TextAlign> appsAlign() async {
     switch (await _get('apps_align', 'right')) {
       case 'left':
@@ -49,11 +55,12 @@ class SettingsService {
     }
   }
 
+  /// Persists the user's preferred Apps Align to the database.
   Future<void> updateAppsAlign(TextAlign newTextAlign) async {
     await _update('apps_align', newTextAlign.name.toLowerCase());
   }
 
-  /// Loads the User's preferred ThemeMode from local or remote storage.
+  /// Loads the User's preferred ThemeMode from the database.
   Future<ThemeMode> themeMode() async {
     switch (await _get('theme_mode', 'system')) {
       case 'light':
@@ -66,29 +73,31 @@ class SettingsService {
     }
   }
 
-  /// Persists the user's preferred ThemeMode to local or remote storage.
+  /// Persists the user's preferred ThemeMode to the database.
   Future<void> updateThemeMode(ThemeMode newThemeMode) async {
     await _update('theme_mode', newThemeMode.name.toLowerCase());
   }
 
+  /// Loads the User's preferred Theme Data from the database.
   Future<ThemeData> themeData() async => ThemeData.from(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.orangeAccent),
-        useMaterial3: true,
-      );
+    colorScheme: ColorScheme.fromSeed(seedColor: Colors.orangeAccent),
+    useMaterial3: true,
+  );
 
+  /// Retrieve a given setting's value from the database. 
+  /// If it doesn't exists the given defaultValue gets stored
+  /// and returned.
   Future<String> _get(String key, String defaultValue) async {
     String? value = await _database.getValue(key);
     if (value == null) {
-      debugPrint("Default $key: $defaultValue");
       await _database.insert(key, defaultValue);
       return defaultValue;
     }
-    debugPrint("Loaded $key: $value");
     return value;
   }
 
+  /// Update a given setting's value on the database
   Future<void> _update(String key, String newValue) async {
-    debugPrint("Update $key: $newValue");
     await _database.update<String>(key, newValue);
   }
 }
