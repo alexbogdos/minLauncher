@@ -22,7 +22,7 @@ class PackageInfo implements Comparable {
 
   int get lastAccessedDiff => (lastAccessed! - DateTime.now().millisecondsSinceEpoch).toInt();
 
-  void launch() {
+  void updateInfo() {
     lastAccessed = DateTime.now().millisecondsSinceEpoch;
     if (score != null) {
       score = score! + 1;

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:installed_apps/app_info.dart';
 import 'package:installed_apps/installed_apps.dart';
 import 'package:min_launcher/src/search/package_info.dart';
@@ -19,62 +18,63 @@ class PackageSearchService {
   Future<void> launchPackage(String packageName) async {
     PackageInfo package = _packages.where((element) => element.packageName == packageName).first;
 
-    package.launch();
+    package.updateInfo();
 
-    // Update in database
-    await _database.updateLastAccessed(packageName, package.lastAccessed!);
-    await _database.updateScore(packageName, package.score!);
+    // Start app launch
+    InstalledApps.startApp(packageName);
 
-    // Launch app
-    await InstalledApps.startApp(packageName);
+    if (await _database.exists(packageName)) {
+      // Update in database
+      await _database.updateLastAccessed(packageName, package.lastAccessed!);
+      await _database.updateScore(packageName, package.score!);
+    } else {
+      // Store in database
+      await _database.insertPackageInfo(package);
+    }
   }
 
   /// Load packages from the database and the device.
-  Future<List<PackageInfo>> loadPackages({bool useIcons = false}) async {
+  Future<List<PackageInfo>> loadPackages() async {
     // Load stored apps from database
     Set<PackageInfo>? storedApps = await _database.getAllPackages();
 
-    // Load apps from device
-    Set<AppInfo> apps = (await InstalledApps.getInstalledApps(true, useIcons, "")).toSet();
+    // Get installed apps
+    Set<AppInfo> apps = (await InstalledApps.getInstalledApps(true, true, "")).toSet();
 
-    // If database empty,
+    // Database empty, map apps to PackageInfos and exit
     if (storedApps == null) {
       _packages.clear();
 
       // Create PackageInfo from device apps
       _packages.addAll(apps.map((app) => PackageInfo.fromApp(app)));
 
-      // Store device apps in database
-      await Future.wait([
-        for (PackageInfo info in _packages) _database.insertPackageInfo(info),
-      ]);
-
+      // Sort packages alphabetically
       _packages.sort((a, b) => a.compareNameTo(b));
 
       return _packages;
     }
 
-    // Merge device and stored data for each app and add to _packages
     _packages.clear();
 
+    // Merge device and stored data for each app and add to _packages
     for (AppInfo app in apps) {
       final PackageInfo info = PackageInfo.fromApp(app);
-      try {
-        final PackageInfo storedInfo = storedApps
-            .where((element) => element.packageName == info.packageName)
-            .first;
+      final PackageInfo? storedInfo = storedApps
+          .where((element) => element.packageName == info.packageName)
+          .firstOrNull;
+
+      // Package exists in database
+      if (storedInfo != null) {
         info.score = storedInfo.score;
         info.lastAccessed = storedInfo.lastAccessed;
       }
-      // Package not found in database
-      on StateError {
-        debugPrint(
-            "Package: `${info.packageName}` not found in database. Creating..");
-        await _database.insertPackageInfo(info);
-      }
+
       _packages.add(info);
-      storedApps
-          .removeWhere((element) => element.packageName == info.packageName);
+
+      // Remove package from stored apps. This means that any package remaining
+      // exists in the database but has been uninstalled from the device
+      // as such, it is later removed from the database.
+      storedApps.removeWhere((element) => element.packageName == info.packageName);
     }
 
     // Remove from the database all apps that where not on the device
@@ -83,8 +83,8 @@ class PackageSearchService {
         _database.removePackageInfo(info.packageName),
     ]);
 
+    // Sort packages alphabetically
     _packages.sort((a, b) => a.compareNameTo(b));
-    // _packages.sort((a,b) => a.compareTo(b));
 
     return _packages;
   }

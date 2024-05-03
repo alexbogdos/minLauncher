@@ -32,6 +32,15 @@ class PackageInfoDatabase {
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
+  Future<bool> exists(String packageName) async {
+    List<Map<String, dynamic>> maps = await _db.query(
+      'package_info',
+      where: 'package_name = ?',
+      whereArgs: [packageName],
+    );
+    return maps.isNotEmpty;
+  }
+
   Future<void> updateScore(String packageName, int score) async {
     await _db.update(
       'package_info',

@@ -9,12 +9,12 @@ import 'settings_service.dart';
 /// Controllers glue Data Services to Flutter Widgets. The SettingsController
 /// uses the SettingsService to store and retrieve user settings.
 class SettingsController with ChangeNotifier {
-  SettingsController(this._settingsService, this._searchController);
+  SettingsController(this._settingsService, this.requestLoad);
 
   // Make SettingsService a private variable so it is not used directly.
   final SettingsService _settingsService;
 
-  final PackageSearchController _searchController;
+  final void Function()? requestLoad;
 
   /// Load the user's settings from the SettingsService. It may load from a
   /// local database or the internet. The controller only knows it can load the
@@ -28,7 +28,7 @@ class SettingsController with ChangeNotifier {
     _locale = await _settingsService.locale();
     _appsAlign = await _settingsService.appsAlign();
 
-    _searchController.askToLoad();
+    if (requestLoad != null) requestLoad!();
 
     // Important! Inform listeners a change has occurred.
     notifyListeners();
@@ -54,7 +54,6 @@ class SettingsController with ChangeNotifier {
     if (newUseIcons == null) return;
     if (newUseIcons == _useIcons) return;
     _useIcons = newUseIcons;
-    if (newUseIcons) _searchController.askToLoad();
     notifyListeners();
     await _settingsService.updateUseIcons(newUseIcons);
   }

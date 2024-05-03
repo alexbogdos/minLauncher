@@ -79,7 +79,6 @@ class MyApp extends StatelessWidget {
                     return PackageSearchView(
                       settings: settingsController,
                       controller: searchController,
-                      useIcons: settingsController.useIcons,
                     );
                 }
               },

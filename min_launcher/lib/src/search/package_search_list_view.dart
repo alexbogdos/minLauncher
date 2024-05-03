@@ -22,8 +22,18 @@ class _PackageSearchListViewState extends State<PackageSearchListView> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async => widget.controller.focusNode.requestFocus(),
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onVerticalDragUpdate: (details) {
+        int sensitivity = 8;
+        // Swipe up.
+        if (details.delta.dy > sensitivity) {}
+
+        // Swipe down.
+        if (details.delta.dy < -sensitivity) {
+          if (widget.controller.atListTop()) widget.controller.resetAndFocus();
+        }
+      },
       child: ListView.builder(
         restorationId: 'packageSearchViewListView',
         itemCount: widget.controller.packages.length,
