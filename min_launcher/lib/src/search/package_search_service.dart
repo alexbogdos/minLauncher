@@ -46,6 +46,9 @@ class PackageSearchService {
     // Get installed apps from device
     Set<AppInfo> apps = (await InstalledApps.getInstalledApps(true, true, "")).toSet();
 
+    // Hide self from the search list
+    apps.removeWhere((element) => element.packageName == 'com.bogdosdev.min_launcher');
+
     // Database empty, map apps to PackageInfos and exit
     if (storedApps == null) {
       // It may be a reload of the packages so we need to clear any
