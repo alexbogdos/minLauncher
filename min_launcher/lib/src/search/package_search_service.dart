@@ -33,6 +33,9 @@ class PackageSearchService {
     }
   }
 
+  /// Open system settings page for this app
+  Future<void> openPackageSettings(String packageName) async => InstalledApps.openSettings(packageName);
+
   /// Load packages from the database and the device.
   Future<List<PackageInfo>> loadPackages() async {
     // Load stored apps from database

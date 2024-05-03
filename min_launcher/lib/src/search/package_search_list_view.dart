@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:min_launcher/src/search/package_info.dart';
 
 import '../settings/settings_controller.dart';
 import 'package_search_controller.dart';
@@ -18,7 +19,6 @@ class PackageSearchListView extends StatefulWidget {
 }
 
 class _PackageSearchListViewState extends State<PackageSearchListView> {
-  // int _selected = -1;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class _PackageSearchListViewState extends State<PackageSearchListView> {
           widget.controller.canFocus = false;
         }
         else if (scrollNotification is ScrollStartNotification) {
-          if (widget.controller.atListTop()) widget.controller.resetAndFocus();
+          if (widget.controller.atListTop()) widget.controller.resetAndFocus(focus: true);
         }
         return false;
       },
@@ -39,7 +39,7 @@ class _PackageSearchListViewState extends State<PackageSearchListView> {
         controller: widget.controller.scrollController,
         itemCount: widget.controller.packages.length,
         itemBuilder: (BuildContext context, int index) {
-          final package = widget.controller.packages[index];
+          final PackageInfo package = widget.controller.packages[index];
           return ListTile(
             visualDensity: VisualDensity.compact,
             // selected: _selected == index,
@@ -54,15 +54,8 @@ class _PackageSearchListViewState extends State<PackageSearchListView> {
               Image.memory(package.icon!, width: 32, height: 32).image,
             )
                 : null,
-            onTap: () {
-              // _selected = -1;
-              widget.controller.launchPackage(package.packageName);
-            },
-            // onLongPress: () {
-            //   setState(() {
-            //     _selected = index;
-            //   });
-            // },
+            onTap: () => widget.controller.launchPackage(package.packageName),
+            onLongPress: () => widget.controller.openPackageSettings(package.packageName),
           );
         },
       ),

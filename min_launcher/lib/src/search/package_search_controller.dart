@@ -96,9 +96,15 @@ class PackageSearchController with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> resetAndFocus() async {
+  Future<void> openPackageSettings(String packageName) async {
+    _searchService.openPackageSettings(packageName);
+    await resetAndFocus();
+    notifyListeners();
+  }
+
+  Future<void> resetAndFocus({bool focus = false}) async {
     _query.clear();
-    canFocus = true;
+    canFocus = focus;
     await Future.delayed(const Duration(milliseconds: 250), () {
       textEditingController.clear();
       if (canFocus) focusNode.requestFocus();
