@@ -23,12 +23,13 @@ class _PackageSearchListViewState extends State<PackageSearchListView> {
   @override
   Widget build(BuildContext context) {
     return NotificationListener<ScrollNotification>(
+      // When the user scrolls
       onNotification: (scrollNotification) {
+        // Is in a scroll action
         if (scrollNotification is ScrollUpdateNotification) {
-          // Handle scroll start, for example, by un-focusing any text fields
-          FocusScope.of(context).unfocus();
-          widget.controller.canFocus = false;
+          widget.controller.unfocus();
         }
+        // Just started scrolling
         else if (scrollNotification is ScrollStartNotification) {
           if (widget.controller.atListTop()) widget.controller.resetAndFocus(focus: true);
         }
@@ -42,7 +43,6 @@ class _PackageSearchListViewState extends State<PackageSearchListView> {
           final PackageInfo package = widget.controller.packages[index];
           return ListTile(
             visualDensity: VisualDensity.compact,
-            // selected: _selected == index,
             title: Text(
               "${package.name}",
               textAlign: widget.settings.appsAlign,

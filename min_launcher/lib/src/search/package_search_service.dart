@@ -10,14 +10,17 @@ class PackageSearchService {
   // FIXME: Limit access to info. Remove PackageInfo, update directly to db.
   List<PackageInfo> get packages => _packages;
 
+  /// Initialize PackageInfoDatabase.
   Future<void> initService() async {
     await _database.initDatabase();
   }
 
-  /// Launch package by packageName
+  /// Launch package by packageName.
   Future<void> launchPackage(String packageName) async {
+    // Get package with the given packageName from _packages
     PackageInfo package = _packages.where((element) => element.packageName == packageName).first;
 
+    // Increase package score by one and update lastAccessed to DateTime.now()
     package.updateInfo();
 
     // Start app launch
@@ -25,15 +28,14 @@ class PackageSearchService {
 
     if (await _database.exists(packageName)) {
       // Update in database
-      await _database.updateLastAccessed(packageName, package.lastAccessed!);
-      await _database.updateScore(packageName, package.score!);
+      await _database.update(packageName, package.score!, package.lastAccessed!);
     } else {
       // Store in database
       await _database.insertPackageInfo(package);
     }
   }
 
-  /// Open system settings page for this app
+  /// Open system settings page for this app.
   Future<void> openPackageSettings(String packageName) async => InstalledApps.openSettings(packageName);
 
   /// Load packages from the database and the device.
@@ -41,11 +43,13 @@ class PackageSearchService {
     // Load stored apps from database
     Set<PackageInfo>? storedApps = await _database.getAllPackages();
 
-    // Get installed apps
+    // Get installed apps from device
     Set<AppInfo> apps = (await InstalledApps.getInstalledApps(true, true, "")).toSet();
 
     // Database empty, map apps to PackageInfos and exit
     if (storedApps == null) {
+      // It may be a reload of the packages so we need to clear any
+      // previous ones
       _packages.clear();
 
       // Create PackageInfo from device apps
@@ -56,10 +60,13 @@ class PackageSearchService {
 
       return _packages;
     }
-
+    
+    // It may be a reload of the packages so we need to clear any
+    // previous ones
     _packages.clear();
 
-    // Merge device and stored data for each app and add to _packages
+    // Merge app name, icon and stored score, lastAccessed for each app
+    // to on PackageInfo and add to _packages
     for (AppInfo app in apps) {
       final PackageInfo info = PackageInfo.fromApp(app);
       final PackageInfo? storedInfo = storedApps
@@ -76,14 +83,13 @@ class PackageSearchService {
 
       // Remove package from stored apps. This means that any package remaining
       // exists in the database but has been uninstalled from the device
-      // as such, it is later removed from the database.
+      // as such, it is later removed from the database
       storedApps.removeWhere((element) => element.packageName == info.packageName);
     }
 
-    // Remove from the database all apps that where not on the device
+    // Remove from the database all apps that were not on the device
     await Future.wait([
-      for (PackageInfo info in storedApps)
-        _database.removePackageInfo(info.packageName),
+      for (PackageInfo info in storedApps) _database.removePackageInfo(info.packageName),
     ]);
 
     // Sort packages alphabetically
