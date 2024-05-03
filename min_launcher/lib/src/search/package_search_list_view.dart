@@ -22,38 +22,50 @@ class _PackageSearchListViewState extends State<PackageSearchListView> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      restorationId: 'packageSearchViewListView',
-      controller: widget.controller.scrollController,
-      itemCount: widget.controller.packages.length,
-      itemBuilder: (BuildContext context, int index) {
-        final package = widget.controller.packages[index];
-
-        return ListTile(
-          visualDensity: VisualDensity.compact,
-          selected: _selected == index,
-          title: Text(
-            "${package.name}",
-            textAlign: widget.settings.appsAlign,
-          ),
-          leading: widget.settings.useIcons && package.hasIcon
-              ? CircleAvatar(
-                  // Display the Flutter Logo image asset.
-                  foregroundImage:
-                      Image.memory(package.icon!, width: 32, height: 32).image,
-                )
-              : null,
-          // onTap: () {
-          //   _selected = -1;
-          //   widget.controller.launchPackage(package.packageName);
-          // },
-          onLongPress: () {
-            setState(() {
-              _selected = index;
-            });
-          },
-        );
+    return NotificationListener<ScrollNotification>(
+      onNotification: (scrollNotification) {
+        if (scrollNotification is ScrollUpdateNotification) {
+          // Handle scroll start, for example, by un-focusing any text fields
+          FocusScope.of(context).unfocus();
+          widget.controller.canFocus = false;
+        }
+        else if (scrollNotification is ScrollStartNotification) {
+          if (widget.controller.atListTop()) widget.controller.resetAndFocus();
+        }
+        return false;
       },
+      child: ListView.builder(
+        restorationId: 'packageSearchViewListView',
+        controller: widget.controller.scrollController,
+        itemCount: widget.controller.packages.length,
+        itemBuilder: (BuildContext context, int index) {
+          final package = widget.controller.packages[index];
+          return ListTile(
+            visualDensity: VisualDensity.compact,
+            selected: _selected == index,
+            title: Text(
+              "${package.name}",
+              textAlign: widget.settings.appsAlign,
+            ),
+            leading: widget.settings.useIcons && package.hasIcon
+                ? CircleAvatar(
+              // Display the Flutter Logo image asset.
+              foregroundImage:
+              Image.memory(package.icon!, width: 32, height: 32).image,
+            )
+                : null,
+            // onTap: () {
+            //   _selected = -1;
+            //   widget.controller.launchPackage(package.packageName);
+            // },
+            onLongPress: () {
+              setState(() {
+                _selected = index;
+              });
+            },
+          );
+        },
+      ),
     );
   }
 }

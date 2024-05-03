@@ -11,6 +11,7 @@ class PackageSearchController with ChangeNotifier {
 
   final PackageSearchService _searchService;
   bool _canLoad = true;
+  bool canFocus = true;
   bool _start = true;
   final List<PackageInfo> _query = List<PackageInfo>.empty(growable: true);
   late Timer _timer;
@@ -38,7 +39,6 @@ class PackageSearchController with ChangeNotifier {
   Future<void> _refresh() async {
     _canLoad = true;
     await loadPackages();
-    notifyListeners();
   }
 
   Future<void> search(String? value) async {
@@ -68,11 +68,13 @@ class PackageSearchController with ChangeNotifier {
     return info.name!.toLowerCase().contains(text.toLowerCase());
   }
 
+  void _onStart() {
+    _timer = Timer.periodic(_refreshDuration, (Timer timer) => _refresh());
+    _start = false;
+  }
+
   Future<List<PackageInfo>> loadPackages() async {
-    if (_start) {
-      _timer = Timer.periodic(_refreshDuration, (Timer timer) => _refresh());
-      _start = false;
-    }
+    if (_start) _onStart();
 
     if (!_canLoad) return _searchService.packages;
     _canLoad = false;
@@ -96,9 +98,10 @@ class PackageSearchController with ChangeNotifier {
 
   Future<void> resetAndFocus() async {
     _query.clear();
+    canFocus = true;
     await Future.delayed(const Duration(milliseconds: 250), () {
       textEditingController.clear();
-      focusNode.requestFocus();
+      if (canFocus) focusNode.requestFocus();
     });
   }
 }
