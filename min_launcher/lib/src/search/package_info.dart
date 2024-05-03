@@ -22,6 +22,7 @@ class PackageInfo implements Comparable {
 
   int get lastAccessedDiff => (lastAccessed! - DateTime.now().millisecondsSinceEpoch).toInt();
 
+  /// Increase score by one and set DateTime.now() as lastAccessed.
   void updateInfo() {
     lastAccessed = DateTime.now().millisecondsSinceEpoch;
     if (score != null) {
@@ -31,26 +32,41 @@ class PackageInfo implements Comparable {
     }
   }
 
+  /// Has score and lastAccessed.
   bool get active => score != null && lastAccessed != null;
 
+  /// Calculate frecency base on simple algorithm using 
+  /// score and lastAccessed.
   double get frecency {
     if (!active) return 0;
 
-    Duration diff = Duration(
-        milliseconds: DateTime.now().millisecondsSinceEpoch - lastAccessed!);
+    Duration diff = Duration(milliseconds: DateTime.now().millisecondsSinceEpoch - lastAccessed!);
 
-    if (diff.inHours < 1) {
-      // Within the last hour
+    if (diff.inMinutes < 30) {
+      // Within the last half hour
       return score! * 4;
-    } else if (diff.inDays < 1) {
-      // Within the last day
+    } else if (diff.inHours < 12) {
+      // Within the last 12 hours
       return score! * 2;
-    } else if (diff.inDays < 8) {
-      // Within the last week
+    } else if (diff.inDays < 5) {
+      // Within the last 5 days
       return score! / 2;
     } else {
       return score! / 4;
     }
+
+    // if (diff.inHours < 1) {
+    //   // Within the last hour
+    //   return score! * 4;
+    // } else if (diff.inDays < 1) {
+    //   // Within the last day
+    //   return score! * 2;
+    // } else if (diff.inDays < 7) {
+    //   // Within the last week
+    //   return score! / 2;
+    // } else {
+    //   return score! / 4;
+    // }
   }
 
   @override
@@ -58,6 +74,7 @@ class PackageInfo implements Comparable {
     return "$name, \t$frecency";
   }
 
+  /// Compare PackageInfo.frecency, PackageInfo.name.
   @override
   int compareTo(other) {
     int diff = (other.frecency - frecency).sign.toInt();
@@ -70,6 +87,7 @@ class PackageInfo implements Comparable {
     return 0;
   }
 
+  /// Compare PackaInfo.name.
   int compareNameTo(other) {
     if (other.name != null && name != null) {
       return name!.compareTo(other.name!);
@@ -77,6 +95,7 @@ class PackageInfo implements Comparable {
     return 0;
   }
 
+  /// Transform PackageInfo to Map. 
   Map<String, dynamic> toMap() {
     return {
       'package_name': packageName,
@@ -85,6 +104,7 @@ class PackageInfo implements Comparable {
     };
   }
 
+  /// Create PackageInfo from Map.
   factory PackageInfo.fromMap(Map<String, dynamic> map) {
     return PackageInfo(
       packageName: map['package_name'],
@@ -93,6 +113,7 @@ class PackageInfo implements Comparable {
     );
   }
 
+  /// Create PackageInfo from AppInfo.
   factory PackageInfo.fromApp(AppInfo app) {
     return PackageInfo(
       packageName: app.packageName,
