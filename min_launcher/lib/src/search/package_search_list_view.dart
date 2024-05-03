@@ -18,7 +18,7 @@ class PackageSearchListView extends StatefulWidget {
 }
 
 class _PackageSearchListViewState extends State<PackageSearchListView> {
-  int _selected = -1;
+  // int _selected = -1;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,7 @@ class _PackageSearchListViewState extends State<PackageSearchListView> {
           final package = widget.controller.packages[index];
           return ListTile(
             visualDensity: VisualDensity.compact,
-            selected: _selected == index,
+            // selected: _selected == index,
             title: Text(
               "${package.name}",
               textAlign: widget.settings.appsAlign,
@@ -54,15 +54,15 @@ class _PackageSearchListViewState extends State<PackageSearchListView> {
               Image.memory(package.icon!, width: 32, height: 32).image,
             )
                 : null,
-            // onTap: () {
-            //   _selected = -1;
-            //   widget.controller.launchPackage(package.packageName);
-            // },
-            onLongPress: () {
-              setState(() {
-                _selected = index;
-              });
+            onTap: () {
+              // _selected = -1;
+              widget.controller.launchPackage(package.packageName);
             },
+            // onLongPress: () {
+            //   setState(() {
+            //     _selected = index;
+            //   });
+            // },
           );
         },
       ),
