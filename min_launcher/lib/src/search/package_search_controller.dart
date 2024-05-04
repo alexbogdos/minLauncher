@@ -114,14 +114,14 @@ class PackageSearchController with ChangeNotifier {
   /// Open app from given package name.
   Future<void> launchPackage(String packageName) async {
     await _searchService.launchPackage(packageName);
-    await resetAndFocus();
+    resetAndFocus();
     notifyListeners();
   }
 
   /// Open the system page from application settings.
   Future<void> openPackageSettings(String packageName) async {
     _searchService.openPackageSettings(packageName);
-    await resetAndFocus();
+    resetAndFocus();
     notifyListeners();
   }
 
@@ -145,7 +145,8 @@ class PackageSearchController with ChangeNotifier {
     // can be cleared
     await Future.delayed(const Duration(milliseconds: 250), () {
       textEditingController.clear();
-      if (canFocus) focusNode.requestFocus();
+      if (canFocus) {focusNode.requestFocus();}
+      else {focusNode.requestFocus();}
     });
   }
 }

@@ -42,13 +42,13 @@ class PackageInfo implements Comparable {
 
     Duration diff = Duration(milliseconds: DateTime.now().millisecondsSinceEpoch - lastAccessed!);
 
-    if (diff.inHours < 1) {
+    if (diff.inMinutes < 45) {
       // Within the last hour
       return score! * 4;
-    } else if (diff.inDays < 1) {
+    } else if (diff.inHours < 18) {
       // Within the last day
       return score! * 2;
-    } else if (diff.inDays < 7) {
+    } else if (diff.inDays < 5) {
       // Within the last week
       return score! / 2;
     } else {
