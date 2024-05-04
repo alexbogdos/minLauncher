@@ -55,7 +55,7 @@ class _PackageSearchViewState extends State<PackageSearchView> {
                           Padding(
                             padding: const EdgeInsets.fromLTRB(16, 16, 20, 16),
                             child: TextField(
-                              autofocus: true,
+                              autofocus: false,
                               focusNode: widget.controller.focusNode,
                               showCursor: false,
                               controller: widget.controller.textEditingController,
