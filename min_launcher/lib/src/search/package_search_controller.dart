@@ -134,17 +134,18 @@ class PackageSearchController with ChangeNotifier {
   /// Clear query text and query list and request/deny focus
   Future<void> resetAndFocus({bool focus = false}) async {
     _query.clear();
-    canFocus = focus;
+
+    // Remove focus from the text field because, after an app launch
+    // returning to launcher the keyboard will be hidden but sometimes
+    // the text field will be focused making the swipe down not work
+    if (!focus) {focusNode.unfocus();} 
+    else {canFocus = true;}
+    
     // Delay so that any key pressed during the launch of a package
-    // can be cleared.
+    // can be cleared
     await Future.delayed(const Duration(milliseconds: 250), () {
       textEditingController.clear();
-      if (canFocus) {
-        focusNode.requestFocus();
-      }
-      else {
-        focusNode.unfocus();
-      }
+      if (canFocus) focusNode.requestFocus();
     });
   }
 }
