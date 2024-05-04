@@ -138,7 +138,7 @@ class PackageSearchController with ChangeNotifier {
     // Remove focus from the text field because, after an app launch
     // returning to launcher the keyboard will be hidden but sometimes
     // the text field will be focused making the swipe down not work
-    if (!focus) {focusNode.unfocus();} 
+    if (!focus) {unfocus();} 
     else {canFocus = true;}
 
     notifyListeners();
