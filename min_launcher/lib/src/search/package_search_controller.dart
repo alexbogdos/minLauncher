@@ -114,14 +114,14 @@ class PackageSearchController with ChangeNotifier {
   /// Open app from given package name.
   Future<void> launchPackage(String packageName) async {
     await _searchService.launchPackage(packageName);
-    resetAndFocus();
+    await resetAndFocus();
     notifyListeners();
   }
 
   /// Open the system page from application settings.
   Future<void> openPackageSettings(String packageName) async {
     _searchService.openPackageSettings(packageName);
-    resetAndFocus();
+    await resetAndFocus();
     notifyListeners();
   }
 
@@ -140,6 +140,8 @@ class PackageSearchController with ChangeNotifier {
     // the text field will be focused making the swipe down not work
     if (!focus) {focusNode.unfocus();} 
     else {canFocus = true;}
+
+    notifyListeners();
     
     // Delay so that any key pressed during the launch of a package
     // can be cleared
