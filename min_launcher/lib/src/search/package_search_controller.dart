@@ -113,15 +113,15 @@ class PackageSearchController with ChangeNotifier {
 
   /// Open app from given package name.
   Future<void> launchPackage(String packageName) async {
-    await _searchService.launchPackage(packageName);
     await resetAndFocus();
+    await _searchService.launchPackage(packageName);
     notifyListeners();
   }
 
   /// Open the system page from application settings.
   Future<void> openPackageSettings(String packageName) async {
-    _searchService.openPackageSettings(packageName);
     await resetAndFocus();
+    _searchService.openPackageSettings(packageName);
     notifyListeners();
   }
 
