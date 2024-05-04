@@ -142,13 +142,13 @@ class PackageSearchController with ChangeNotifier {
     else {canFocus = true;}
 
     notifyListeners();
-    
+
     // Delay so that any key pressed during the launch of a package
     // can be cleared
     await Future.delayed(const Duration(milliseconds: 250), () {
       textEditingController.clear();
       if (canFocus) {focusNode.requestFocus();}
-      else {focusNode.requestFocus();}
+      else {focusNode.unfocus();}
     });
   }
 }
