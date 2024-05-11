@@ -31,7 +31,7 @@ class PackageSearchController with ChangeNotifier {
   /// Initialize the PackageSearchService.
   Future<void> init() async {
     await _searchService.initService();
-    focusNode.addListener(_moveCursor);
+    focusNode.addListener(_onFocus);
   }
 
   /// Request to reload packages at the next update of the PackageSearchView.
@@ -48,10 +48,14 @@ class PackageSearchController with ChangeNotifier {
     await loadPackages();
   }
 
-  /// On focus position the cursor at the end of the text.
-  void _moveCursor() {
+  /// Add as listener to FocusNode and run when it has requested focus
+  void _onFocus() {
     if (!focusNode.hasFocus || textEditingController.text.isEmpty) return;
+    _moveCursorAtEnd();
+  }
 
+  /// Position the cursor at the end of the text.
+  void _moveCursorAtEnd() {
     textEditingController.selection = TextSelection.collapsed(
       offset: textEditingController.text.length,
     );
@@ -142,8 +146,8 @@ class PackageSearchController with ChangeNotifier {
   }
 
   /// Clear query text and query list and request/deny focus
-  Future<void> resetAndFocus({bool focus = false}) async {
-    _query.clear();
+  Future<void> resetAndFocus({bool focus = false, bool clear = true}) async {
+    if (clear) _query.clear();
 
     // Remove focus from the text field because, after an app launch
     // returning to launcher the keyboard will be hidden but sometimes
@@ -156,8 +160,8 @@ class PackageSearchController with ChangeNotifier {
     // Delay so that any key pressed during the launch of a package
     // can be cleared
     await Future.delayed(const Duration(milliseconds: 250), () {
-      textEditingController.clear();
-      if (canFocus) {focusNode.requestFocus();}
+      if (clear) textEditingController.clear();
+      if (canFocus) {focusNode.requestFocus(); _moveCursorAtEnd();}
       else {focusNode.unfocus();}
     });
   }
