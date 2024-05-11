@@ -31,6 +31,7 @@ class PackageSearchController with ChangeNotifier {
   /// Initialize the PackageSearchService.
   Future<void> init() async {
     await _searchService.initService();
+    focusNode.addListener(_moveCursor);
   }
 
   /// Request to reload packages at the next update of the PackageSearchView.
@@ -45,6 +46,15 @@ class PackageSearchController with ChangeNotifier {
   Future<void> _refresh() async {
     _canLoad = true;
     await loadPackages();
+  }
+
+  /// On focus position the cursor at the end of the text.
+  void _moveCursor() {
+    if (!focusNode.hasFocus || textEditingController.text.isEmpty) return;
+
+    textEditingController.selection = TextSelection.collapsed(
+      offset: textEditingController.text.length,
+    );
   }
 
   /// Search for the packages that match the given name
@@ -147,14 +157,7 @@ class PackageSearchController with ChangeNotifier {
     // can be cleared
     await Future.delayed(const Duration(milliseconds: 250), () {
       textEditingController.clear();
-      if (canFocus) {
-        focusNode.requestFocus();
-
-        // Move cursor to end of text
-        textEditingController.selection = TextSelection.collapsed(
-          offset: textEditingController.text.length,
-        );
-      }
+      if (canFocus) {focusNode.requestFocus();}
       else {focusNode.unfocus();}
     });
   }
