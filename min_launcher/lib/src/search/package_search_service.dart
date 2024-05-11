@@ -11,8 +11,8 @@ class PackageSearchService {
   List<PackageInfo> get packages => _packages;
 
   /// Initialize PackageInfoDatabase.
-  Future<void> initService() async {
-    await _database.initDatabase();
+  Future<void> init() async {
+    await _database.open();
   }
 
   /// Launch package by packageName.

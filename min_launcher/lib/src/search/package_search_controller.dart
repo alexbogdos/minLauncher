@@ -5,21 +5,23 @@ import 'package:flutter/material.dart';
 
 import 'package_info.dart';
 import 'package_search_service.dart';
+import 'package_search_bar_utils.dart';
 
 class PackageSearchController with ChangeNotifier {
   PackageSearchController(this._searchService);
 
   final PackageSearchService _searchService;
   bool _canLoad = true;
-  bool canFocus = true;
   bool _start = true;
   final List<PackageInfo> _query = List<PackageInfo>.empty(growable: true);
   late Timer _timer;
   static const Duration _refreshDuration = Duration(seconds: 30);
 
-  TextEditingController textEditingController = TextEditingController();
-  ScrollController scrollController = ScrollController();
-  FocusNode focusNode = FocusNode();
+  final PackageSearchBarUtils _barUtils = PackageSearchBarUtils();
+  final ScrollController scrollController = ScrollController();
+
+  TextEditingController get textEditingController => _barUtils.textEditingController;
+  FocusNode get focusNode => _barUtils.focusNode;
 
   /// Return the raw list of packages or the resulted query list if
   /// there is a query been made.
@@ -30,35 +32,58 @@ class PackageSearchController with ChangeNotifier {
 
   /// Initialize the PackageSearchService.
   Future<void> init() async {
-    await _searchService.initService();
-    focusNode.addListener(_onFocus);
+    await _searchService.init();
+    _barUtils.init();
+  }
+
+  /// Initialize the Timer which periodically refreshes the packages list.
+  void _onStart() {
+    _timer = Timer.periodic(_refreshDuration, (Timer timer) => _forceReload());
+    _start = false;
+  }
+
+  /// Load all system packages.
+  Future<List<PackageInfo>> loadPackages() async {
+    // Since the init() runs before the PackageSearchView widget
+    // gets initialized, this is the best place to run _onStart()
+    if (_start) _onStart();
+
+    if (!_canLoad) return _searchService.packages;
+    _canLoad = false;
+    debugPrint("Loading packages..");
+    final List<PackageInfo> list = await _searchService.loadPackages();
+    debugPrint("Finished. Packages loaded");
+    notifyListeners();
+    return list;
   }
 
   /// Request to reload packages at the next update of the PackageSearchView.
   void requestLoad() => _canLoad = true;
 
-  /// The ListView on PackageSearchListView is a the top.
-  bool atListTop() {
-    return scrollController.position.atEdge && scrollController.position.pixels == 0;
-  }
-
   /// Force reload of packages.
-  Future<void> _refresh() async {
+  Future<void> _forceReload() async {
     _canLoad = true;
     await loadPackages();
   }
 
-  /// Add as listener to FocusNode and run when it has requested focus
-  void _onFocus() {
-    if (!focusNode.hasFocus || textEditingController.text.isEmpty) return;
-    _moveCursorAtEnd();
+  /// Launch the app located at the top of the list.
+  Future<void> launchPackageAtTop() async {
+    PackageInfo? package = packages.firstOrNull;
+    if (package != null) await launchPackage(package.packageName);
   }
 
-  /// Position the cursor at the end of the text.
-  void _moveCursorAtEnd() {
-    textEditingController.selection = TextSelection.collapsed(
-      offset: textEditingController.text.length,
-    );
+  /// Open app from given package name.
+  Future<void> launchPackage(String packageName) async {
+    await clearAndFocus();
+    await _searchService.launchPackage(packageName);
+    notifyListeners();
+  }
+
+  /// Open the system page from application settings.
+  Future<void> openPackageSettings(String packageName) async {
+    await clearAndFocus();
+    _searchService.openPackageSettings(packageName);
+    notifyListeners();
   }
 
   /// Search for the packages that match the given name
@@ -66,7 +91,7 @@ class PackageSearchController with ChangeNotifier {
   Future<void> search(String? name) async {
     // Its query it's separate than others
     _query.clear();
-    
+
     // The given name must be the result of the user
     // pressing backspace. Call notifyListeners() to update
     // the PackageSearchView and show the complete package list
@@ -86,7 +111,7 @@ class PackageSearchController with ChangeNotifier {
     notifyListeners();
 
     // If the query has only one result, launch the app
-    // There is a small to delay as to have time to show the user 
+    // There is a small to delay as to have time to show the user
     // the results
     await Future.delayed(const Duration(milliseconds: 50), () {
       if (_query.length == 1) launchPackageAtTop();
@@ -98,71 +123,26 @@ class PackageSearchController with ChangeNotifier {
     return info.name!.toLowerCase().contains(text.toLowerCase());
   }
 
-  /// Initialize the Timer which periodically refreshes the packages list.
-  void _onStart() {
-    _timer = Timer.periodic(_refreshDuration, (Timer timer) => _refresh());
-    _start = false;
-  }
-
-  /// Load all system packages.
-  Future<List<PackageInfo>> loadPackages() async {
-    // Since the init() runs before the PackageSearchView widget
-    // gets initialized, this is the best place to run _onStart()
-    if (_start) _onStart();
-
-    if (!_canLoad) return _searchService.packages;
-    _canLoad = false;
-    debugPrint("Loading packages..");
-    final List<PackageInfo> list = await _searchService.loadPackages();
-    debugPrint("Finished. Packages loaded");
-    notifyListeners();
-    return list;
-  }
-
-  /// Launch the app located at the top of the list.
-  Future<void> launchPackageAtTop() async {
-    PackageInfo? package = packages.firstOrNull;
-    if (package != null) await launchPackage(package.packageName);
-  }
-
-  /// Open app from given package name.
-  Future<void> launchPackage(String packageName) async {
-    await resetAndFocus();
-    await _searchService.launchPackage(packageName);
-    notifyListeners();
-  }
-
-  /// Open the system page from application settings.
-  Future<void> openPackageSettings(String packageName) async {
-    await resetAndFocus();
-    _searchService.openPackageSettings(packageName);
-    notifyListeners();
-  }
-
   /// Unfocus from text field.
-  void unfocus() {
-    focusNode.unfocus();
-    canFocus = false;
+  void unfocus() => _barUtils.unfocus();
+
+  /// Ensure only one focus request can be made at once.
+  bool _canFocusTop = true;
+
+  /// Focus on search bar when the ListView on PackageSearchListView is a the top.
+  /// If clear = false then the current search query will not be cleared.
+  Future<void> focusIfAtTop({bool clear = true}) async {
+    if (!_canFocusTop) return;
+    _canFocusTop = false;
+    if (scrollController.position.atEdge && scrollController.position.pixels == 0) {
+      await clearAndFocus(focus: true, clear: clear);
+      _canFocusTop = true;
+    }
   }
 
-  /// Clear query text and query list and request/deny focus
-  Future<void> resetAndFocus({bool focus = false, bool clear = true}) async {
+  /// Clear query text and query list and request focus
+  Future<void> clearAndFocus({bool focus = false, bool clear = true}) async {
     if (clear) _query.clear();
-
-    // Remove focus from the text field because, after an app launch
-    // returning to launcher the keyboard will be hidden but sometimes
-    // the text field will be focused making the swipe down not work
-    if (!focus) {unfocus();} 
-    else {canFocus = true;}
-
-    notifyListeners();
-
-    // Delay so that any key pressed during the launch of a package
-    // can be cleared
-    await Future.delayed(const Duration(milliseconds: 250), () {
-      if (clear) textEditingController.clear();
-      if (canFocus) {focusNode.requestFocus(); _moveCursorAtEnd();}
-      else {focusNode.unfocus();}
-    });
+    await _barUtils.clearAndFocus(notifyListeners, focus: focus, clear: clear);
   }
 }

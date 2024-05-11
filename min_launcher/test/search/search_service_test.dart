@@ -8,7 +8,7 @@ void main() {
     test('Should load device apps and create an empty database', () async {
       // Create PackageSearchService and initialize it
       PackageSearchService service = PackageSearchService();
-      await service.initService();
+      await service.init();
 
     });
   });

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:min_launcher/src/search/package_info.dart';
 
 import '../settings/settings_controller.dart';
 import 'package_search_controller.dart';
+import 'package_info.dart';
 
 class PackageSearchListView extends StatefulWidget {
   const PackageSearchListView({
@@ -31,19 +31,18 @@ class _PackageSearchListViewState extends State<PackageSearchListView> {
         }
         // Just started scrolling
         else if (scrollNotification is ScrollStartNotification) {
-          if (widget.controller.atListTop()) widget.controller.resetAndFocus(focus: true);
+          widget.controller.focusIfAtTop();
         }
         return false;
       },
       child: GestureDetector(
         behavior: HitTestBehavior.translucent,
         onVerticalDragUpdate: (details) {
+
           int sensitivity = 8;
           // Swipe down
           if (details.delta.dy > sensitivity) {
-            if (widget.controller.atListTop()) {
-              widget.controller.resetAndFocus(focus: true, clear: false);
-            }
+            widget.controller.focusIfAtTop(clear: false);
           }
         },
         child: ListView.builder(

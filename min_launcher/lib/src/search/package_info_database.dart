@@ -7,7 +7,7 @@ class PackageInfoDatabase {
   late Database _db;
 
   /// Initialize database. Create if it doesn't exist.
-  Future<void> initDatabase() async {
+  Future<void> open() async {
     _db = await openDatabase(
       _databasePath,
       version: 1,
