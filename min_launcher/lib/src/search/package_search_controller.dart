@@ -147,7 +147,14 @@ class PackageSearchController with ChangeNotifier {
     // can be cleared
     await Future.delayed(const Duration(milliseconds: 250), () {
       textEditingController.clear();
-      if (canFocus) {focusNode.requestFocus();}
+      if (canFocus) {
+        focusNode.requestFocus();
+
+        // Move cursor to end of text
+        textEditingController.selection = TextSelection.collapsed(
+          offset: textEditingController.text.length,
+        );
+      }
       else {focusNode.unfocus();}
     });
   }
