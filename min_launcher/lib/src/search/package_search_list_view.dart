@@ -35,6 +35,15 @@ class _PackageSearchListViewState extends State<PackageSearchListView> {
         }
         return false;
       },
+
+      // Due to an undefined bug with ListView the GestureDector
+      // detects only when the list's height is smaller than the
+      // screen's height. For that we use the NotificationListener
+      // above to detect swipes when list's height > screen's height.
+      // 
+      // The focusIfAtTop() can not be run simultaniously meaning that
+      // when the list's height <= screen's height it doesn't matter
+      // which one detects the gesture.
       child: GestureDetector(
         behavior: HitTestBehavior.translucent,
         onVerticalDragUpdate: (details) {
@@ -42,7 +51,7 @@ class _PackageSearchListViewState extends State<PackageSearchListView> {
           int sensitivity = 8;
           // Swipe down
           if (details.delta.dy > sensitivity) {
-            widget.controller.focusIfAtTop(clear: false);
+            widget.controller.focusIfAtTop();
           }
         },
         child: ListView.builder(
