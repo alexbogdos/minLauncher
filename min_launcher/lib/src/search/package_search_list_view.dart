@@ -25,17 +25,6 @@ class _PackageSearchListViewState extends State<PackageSearchListView> {
     return NotificationListener<ScrollNotification>(
       // When the user scrolls
       onNotification: (scrollNotification) {
-        // // The user has tried to scroll but the list is at edge
-        // if (scrollNotification is OverscrollNotification) {
-        //   DragUpdateDetails? details = scrollNotification.dragDetails;
-        //   if (details != null) {
-        //     int sensitivity = 8;
-        //     if (details.delta.dy > sensitivity) {
-        //       widget.controller.focusIfAtTop();
-        //     }
-        //   }
-        // }
-
         // Is in a scroll action
         if (scrollNotification is ScrollUpdateNotification) {
           widget.controller.unfocus();
