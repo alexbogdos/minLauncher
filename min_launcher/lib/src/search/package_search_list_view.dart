@@ -25,6 +25,17 @@ class _PackageSearchListViewState extends State<PackageSearchListView> {
     return NotificationListener<ScrollNotification>(
       // When the user scrolls
       onNotification: (scrollNotification) {
+        // // The user has tried to scroll but the list is at edge
+        // if (scrollNotification is OverscrollNotification) {
+        //   DragUpdateDetails? details = scrollNotification.dragDetails;
+        //   if (details != null) {
+        //     int sensitivity = 8;
+        //     if (details.delta.dy > sensitivity) {
+        //       widget.controller.focusIfAtTop();
+        //     }
+        //   }
+        // }
+
         // Is in a scroll action
         if (scrollNotification is ScrollUpdateNotification) {
           widget.controller.unfocus();
@@ -41,13 +52,13 @@ class _PackageSearchListViewState extends State<PackageSearchListView> {
       // screen's height. For that we use the NotificationListener
       // above to detect swipes when list's height > screen's height.
       // 
-      // The focusIfAtTop() can not be run simultaniously meaning that
+      // The focusIfAtTop() can not be run simultaneously meaning that
       // when the list's height <= screen's height it doesn't matter
-      // which one detects the gesture.
+      // which one detects the gesture, (even though the NotificationListener
+      // will not detect it.
       child: GestureDetector(
         behavior: HitTestBehavior.translucent,
         onVerticalDragUpdate: (details) {
-
           int sensitivity = 8;
           // Swipe down
           if (details.delta.dy > sensitivity) {

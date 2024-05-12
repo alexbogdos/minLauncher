@@ -44,7 +44,11 @@ class PackageSearchBarUtils {
     notifyListeners();
 
     // Delay so that any key pressed during the launch of a package
-    // can be cleared
+    // can be cleared.
+    // Also, we delay so that if the NotificationListener gives a
+    // false positive (swipe up) then, the canFocus will be set
+    // to false in it's ScrollUpdateNotification part of the if
+    // statement when calling controller.unfocus().
     await Future.delayed(const Duration(milliseconds: 250), () {
       if (clear) textEditingController.clear();
       if (canFocus) {focusNode.requestFocus(); _moveCursorAtEnd();}

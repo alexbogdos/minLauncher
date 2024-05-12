@@ -131,9 +131,8 @@ class PackageSearchController with ChangeNotifier {
 
   /// Focus on search bar when the ListView on PackageSearchListView is a the top.
   Future<void> focusIfAtTop() async {
-    if (!_canFocusTop) return;
-    _canFocusTop = false;
-    if (scrollController.position.atEdge && scrollController.position.pixels == 0) {
+    if (_canFocusTop && scrollController.position.atEdge && scrollController.position.pixels == 0) {
+      _canFocusTop = false;
       await clearAndFocus(focus: true, clear: false);
       _canFocusTop = true;
     }
