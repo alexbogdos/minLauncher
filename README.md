@@ -1,6 +1,6 @@
 # minLauncher
 
-Minimal Android home launcher
+Minimal Android home launcher. Created using Flutter. Using Material 3 You.
 
 ## App Search
 
