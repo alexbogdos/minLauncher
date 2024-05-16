@@ -23,7 +23,7 @@ class SettingsView extends StatelessWidget {
         title: Text(AppLocalizations.of(context)!.settingsTitle),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+        padding: const EdgeInsets.fromLTRB(16, 16, 20, 16),
         child: Column(
           children: [
             SettingsCategory(
@@ -128,7 +128,8 @@ class SettingsView extends StatelessWidget {
                       controller.updateSearchDepth(controller.searchDepth - 1);
                     },
                     style: TextButton.styleFrom(
-                      minimumSize: const Size(40, 40),
+                      minimumSize: const Size(30, 30),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                     child: const Text("-"),
                   ),
@@ -143,7 +144,8 @@ class SettingsView extends StatelessWidget {
                       controller.updateSearchDepth(controller.searchDepth + 1);
                     },
                     style: TextButton.styleFrom(
-                      minimumSize: const Size(40, 40),
+                      minimumSize: const Size(30, 30),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                     child: const Text("+"),
                   )

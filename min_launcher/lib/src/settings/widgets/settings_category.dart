@@ -16,7 +16,9 @@ class SettingsCategory extends StatelessWidget {
           alignment: Alignment.centerLeft,
           child: Text(
             title,
-            style: Theme.of(context).textTheme.titleLarge,
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.w500,
+                ),
           ),
         ),
         const Divider(thickness: 2),
