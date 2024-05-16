@@ -20,13 +20,16 @@ class PackageSearchController with ChangeNotifier {
   final PackageSearchBarUtils _barUtils = PackageSearchBarUtils();
   final ScrollController scrollController = ScrollController();
 
-  TextEditingController get textEditingController => _barUtils.textEditingController;
+  TextEditingController get textEditingController =>
+      _barUtils.textEditingController;
   FocusNode get focusNode => _barUtils.focusNode;
 
   /// Return the raw list of packages or the resulted query list if
   /// there is a query been made.
   List<PackageInfo> get packages {
-    if (_query.isNotEmpty || textEditingController.value.text.isNotEmpty) return _query;
+    if (_query.isNotEmpty || textEditingController.value.text.isNotEmpty) {
+      return _query;
+    }
     return _searchService.packages;
   }
 
@@ -88,7 +91,7 @@ class PackageSearchController with ChangeNotifier {
 
   /// Search for the packages that match the given name
   /// return sorted based on package frecency.
-  Future<void> search(String? name) async {
+  Future<void> search(String queryStr, int depth) async {
     // Its query it's separate than others
     _query.clear();
 
@@ -96,13 +99,14 @@ class PackageSearchController with ChangeNotifier {
     // pressing backspace. Call notifyListeners() to update
     // the PackageSearchView and show the complete package list
     // after clearing the query.
-    if (name == null || name == '') {
+    if (queryStr == '') {
       notifyListeners();
       return;
     }
 
     // Add all packages that match the name to the query list
-    _query.addAll(_searchService.packages.where((element) => matchAlgorithm(element, name)));
+    _query.addAll(_searchService.packages
+        .where((element) => matchAlgorithm(element, queryStr)));
 
     // Sort based on package frecency
     _query.sort((a, b) => a.compareTo(b));
@@ -114,7 +118,9 @@ class PackageSearchController with ChangeNotifier {
     // There is a small to delay as to have time to show the user
     // the results
     await Future.delayed(const Duration(milliseconds: 50), () {
-      if (_query.length == 1) launchPackageAtTop();
+      if (_query.length == 1 || (depth > 0 && queryStr.length >= depth)) {
+        launchPackageAtTop();
+      }
     });
   }
 
@@ -131,7 +137,9 @@ class PackageSearchController with ChangeNotifier {
 
   /// Focus on search bar when the ListView on PackageSearchListView is a the top.
   Future<void> focusIfAtTop() async {
-    if (_canFocusTop && scrollController.position.atEdge && scrollController.position.pixels == 0) {
+    if (_canFocusTop &&
+        scrollController.position.atEdge &&
+        scrollController.position.pixels == 0) {
       _canFocusTop = false;
       await clearAndFocus(focus: true, clear: false);
       _canFocusTop = true;

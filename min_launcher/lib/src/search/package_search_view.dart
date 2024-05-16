@@ -36,7 +36,8 @@ class _PackageSearchViewState extends State<PackageSearchView> {
               IconButton(
                 icon: const Icon(Icons.settings),
                 onPressed: () {
-                  Navigator.restorablePushNamed(context, SettingsView.routeName);
+                  Navigator.restorablePushNamed(
+                      context, SettingsView.routeName);
                 },
               ),
             ],
@@ -45,8 +46,7 @@ class _PackageSearchViewState extends State<PackageSearchView> {
               listenable: widget.controller,
               builder: (BuildContext context, Widget? child) {
                 return FutureBuilder<List<PackageInfo>>(
-                  future:
-                      widget.controller.loadPackages(),
+                  future: widget.controller.loadPackages(),
                   builder: (BuildContext context,
                       AsyncSnapshot<List<PackageInfo>> snapshot) {
                     if (snapshot.hasData) {
@@ -58,14 +58,22 @@ class _PackageSearchViewState extends State<PackageSearchView> {
                               autofocus: false,
                               focusNode: widget.controller.focusNode,
                               showCursor: false,
-                              controller: widget.controller.textEditingController,
+                              controller:
+                                  widget.controller.textEditingController,
                               textAlign: widget.settings.appsAlign,
-                              style:  Theme.of(context).textTheme.titleMedium,
+                              style: Theme.of(context).textTheme.titleMedium,
                               decoration: InputDecoration(
-                                hintText: AppLocalizations.of(context)!.searchTitle,
+                                hintText:
+                                    AppLocalizations.of(context)!.searchTitle,
                               ),
-                              onChanged: widget.controller.search,
-                              onEditingComplete: widget.controller.launchPackageAtTop,
+                              onChanged: (String query) {
+                                widget.controller.search(
+                                  query,
+                                  widget.settings.searchDepth,
+                                );
+                              },
+                              onEditingComplete:
+                                  widget.controller.launchPackageAtTop,
                             ),
                           ),
                           Expanded(
