@@ -92,7 +92,7 @@ class PackageSearchController with ChangeNotifier {
 
   /// Search for the packages that match the given name
   /// return sorted based on package frecency.
-  Future<void> search(String queryStr, int depth) async {
+  Future<void> search(String queryStr, bool autoLaunch, int depth) async {
     // Its query it's separate than others
     _query.clear();
 
@@ -114,6 +114,8 @@ class PackageSearchController with ChangeNotifier {
 
     // Redraw PackageSearchView, display new packages list
     notifyListeners();
+
+    if (!autoLaunch) return;
 
     // If the query has only one result, launch the app
     // There is a small to delay as to have time to show the user

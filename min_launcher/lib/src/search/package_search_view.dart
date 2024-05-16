@@ -69,6 +69,7 @@ class _PackageSearchViewState extends State<PackageSearchView> {
                               onChanged: (String query) {
                                 widget.controller.search(
                                   query.trim(),
+                                  widget.settings.autoLaunch,
                                   widget.settings.searchDepth,
                                 );
                               },

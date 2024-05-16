@@ -26,6 +26,7 @@ class SettingsView extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(16, 16, 20, 16),
         child: Column(
           children: [
+            // General
             SettingsCategory(
               title: AppLocalizations.of(context)!.settingsCategoryGlobal,
             ),
@@ -80,6 +81,8 @@ class SettingsView extends StatelessWidget {
                 ],
               ),
             ),
+
+            // Drawer
             SettingsCategory(
               title: AppLocalizations.of(context)!.settingsCategoryDrawer,
               topPadding: 24,
@@ -115,6 +118,14 @@ class SettingsView extends StatelessWidget {
                         .settingsToggleAppsAlignValueRight),
                   ),
                 ],
+              ),
+            ),
+            SettingsEntry(
+              title:
+                  AppLocalizations.of(context)!.settingsToggleAutoLaunchTitle,
+              child: Switch(
+                value: controller.autoLaunch,
+                onChanged: controller.updateAutoLaunch,
               ),
             ),
             SettingsEntry(

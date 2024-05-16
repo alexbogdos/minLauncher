@@ -27,6 +27,8 @@
 
     "settingsToggleUseIconsTitle": "App icons",
 
+    "settingsToggleAutoLaunchTitle": "Auto launch",
+
     "settingsToggleAppsAlignTitle": "Apps Align",
     "settingsToggleAppsAlignValueLeft": "Left",
     "settingsToggleAppsAlignValueCenter": "Center",

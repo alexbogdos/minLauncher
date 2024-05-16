@@ -25,6 +25,16 @@ class SettingsService {
     await _update('use_icons', newUseIcons ? 'true' : 'false');
   }
 
+  /// Loads the User's preferred Auto Launch from the database.
+  Future<bool> autoLaunch() async {
+    return (await _get('auto_launch', 'true')) == 'true' ? true : false;
+  }
+
+  /// Persists the user's preferred Auto Launch to the database.
+  Future<void> updateAutoLaunch(bool newAutoLaunch) async {
+    await _update('auto_launch', newAutoLaunch ? 'true' : 'false');
+  }
+
   /// Loads the User's preferred Search Depth from the database.
   Future<int> searchDepth() async {
     return int.parse(await _get('search_depth', '0'));
@@ -32,7 +42,7 @@ class SettingsService {
 
   /// Persists the user's preferred Search Depth to the database.
   Future<void> updateSearchDepth(int newSearchDepth) async {
-    await _update('use_icons', newSearchDepth.toString());
+    await _update('search_depth', newSearchDepth.toString());
   }
 
   /// Loads the User's preferred Locale from the database.

@@ -26,6 +26,7 @@ class SettingsController with ChangeNotifier {
     _themeMode = await _settingsService.themeMode();
     _themeData = await _settingsService.themeData();
     _useIcons = await _settingsService.useIcons();
+    _autoLaunch = await _settingsService.autoLaunch();
     _searchDepth = await _settingsService.searchDepth();
     _locale = await _settingsService.locale();
     _appsAlign = await _settingsService.appsAlign();
@@ -41,6 +42,7 @@ class SettingsController with ChangeNotifier {
   late ThemeMode _themeMode;
   late ThemeData _themeData;
   late bool _useIcons;
+  late bool _autoLaunch;
   late int _searchDepth;
   late Locale _locale;
   late TextAlign _appsAlign;
@@ -49,6 +51,7 @@ class SettingsController with ChangeNotifier {
   ThemeMode get themeMode => _themeMode;
   ThemeData get themeData => _themeData;
   bool get useIcons => _useIcons;
+  bool get autoLaunch => _autoLaunch;
   int get searchDepth => _searchDepth;
   Locale get locale => _locale;
   TextAlign get appsAlign => _appsAlign;
@@ -60,6 +63,15 @@ class SettingsController with ChangeNotifier {
     _useIcons = newUseIcons;
     notifyListeners();
     await _settingsService.updateUseIcons(newUseIcons);
+  }
+
+  /// Update and persist the Auto Launch based on the user's selection.
+  Future<void> updateAutoLaunch(bool? newAutoLaunch) async {
+    if (newAutoLaunch == null) return;
+    if (newAutoLaunch == _autoLaunch) return;
+    _autoLaunch = newAutoLaunch;
+    notifyListeners();
+    await _settingsService.updateAutoLaunch(newAutoLaunch);
   }
 
   /// Update and persist the Search Depth based on the user's selection.

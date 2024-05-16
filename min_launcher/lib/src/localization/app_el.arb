@@ -27,6 +27,8 @@
 
     "settingsToggleUseIconsTitle": "Εικονίδια εφαρμογών",
 
+    "settingsToggleAutoLaunchTitle": "Αυτόματη εκκίνηση",
+
     "settingsToggleAppsAlignTitle": "Στοίχιση Εφαρμογών",
     "settingsToggleAppsAlignValueLeft": "Αριστερή",
     "settingsToggleAppsAlignValueCenter": "Κεντρική",
