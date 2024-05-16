@@ -82,7 +82,7 @@ class SettingsView extends StatelessWidget {
             ),
             SettingsCategory(
               title: AppLocalizations.of(context)!.settingsCategoryDrawer,
-              topPadding: 12,
+              topPadding: 24,
             ),
             SettingsEntry(
               title: AppLocalizations.of(context)!.settingsToggleUseIconsTitle,
