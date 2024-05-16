@@ -19,7 +19,6 @@ class PackageSearchListView extends StatefulWidget {
 }
 
 class _PackageSearchListViewState extends State<PackageSearchListView> {
-
   @override
   Widget build(BuildContext context) {
     return NotificationListener<ScrollNotification>(
@@ -31,16 +30,31 @@ class _PackageSearchListViewState extends State<PackageSearchListView> {
         }
         // Just started scrolling
         else if (scrollNotification is ScrollStartNotification) {
+          if (scrollNotification.dragDetails == null) {
+            widget.controller.focusIfAtTop();
+            return false;
+          }
+
+          // Don't register gesture if height ration is above this
+          const heightThreshold = 0.95;
+
+          final double ratio =
+              scrollNotification.dragDetails!.globalPosition.dy /
+                  MediaQuery.of(context).size.height;
+
+          // Avoid getting triggered from back button etc.
+          if (ratio > heightThreshold) return false;
+
           widget.controller.focusIfAtTop();
         }
         return false;
       },
 
-      // Due to an undefined bug with ListView the GestureDector
+      // Due to an undefined bug with ListView the GestureDetector
       // detects only when the list's height is smaller than the
       // screen's height. For that we use the NotificationListener
       // above to detect swipes when list's height > screen's height.
-      // 
+      //
       // The focusIfAtTop() can not be run simultaneously meaning that
       // when the list's height <= screen's height it doesn't matter
       // which one detects the gesture, (even though the NotificationListener
@@ -68,13 +82,15 @@ class _PackageSearchListViewState extends State<PackageSearchListView> {
               ),
               leading: widget.settings.useIcons && package.hasIcon
                   ? CircleAvatar(
-                // Display the Flutter Logo image asset.
-                foregroundImage:
-                Image.memory(package.icon!, width: 32, height: 32).image,
-              )
+                      // Display the Flutter Logo image asset.
+                      foregroundImage:
+                          Image.memory(package.icon!, width: 32, height: 32)
+                              .image,
+                    )
                   : null,
               onTap: () => widget.controller.launchPackage(package.packageName),
-              onLongPress: () => widget.controller.openPackageSettings(package.packageName),
+              onLongPress: () =>
+                  widget.controller.openPackageSettings(package.packageName),
             );
           },
         ),
