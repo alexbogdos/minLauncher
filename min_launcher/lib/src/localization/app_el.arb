@@ -18,7 +18,7 @@
     "settingsCategoryGlobal": "Γενικές",
     "settingsCategoryDrawer": "Συρτάρι",
 
-    "settingsToggleThemeModeTitle": "Θέμα Εφαρμογής",
+    "settingsToggleThemeModeTitle": "Θέμα εφαρμογής",
     "settingsToggleThemeModeValueSystem": "Συστήματος",
     "settingsToggleThemeModeValueLight": "Ανοικτό",
     "settingsToggleThemeModeValueDark": "Σκοτεινό",
@@ -29,7 +29,7 @@
 
     "settingsToggleAutoLaunchTitle": "Αυτόματη εκκίνηση",
 
-    "settingsToggleAppsAlignTitle": "Στοίχιση Εφαρμογών",
+    "settingsToggleAppsAlignTitle": "Στοίχιση εφαρμογών",
     "settingsToggleAppsAlignValueLeft": "Αριστερή",
     "settingsToggleAppsAlignValueCenter": "Κεντρική",
     "settingsToggleAppsAlignValueRight": "Δεξία",
