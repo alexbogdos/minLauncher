@@ -27,7 +27,8 @@ class PackageSearchController with ChangeNotifier {
   /// Return the raw list of packages or the resulted query list if
   /// there is a query been made.
   List<PackageInfo> get packages {
-    if (_query.isNotEmpty || textEditingController.value.text.isNotEmpty) {
+    if (_query.isNotEmpty ||
+        textEditingController.value.text.trim().isNotEmpty) {
       return _query;
     }
     return _searchService.packages;
