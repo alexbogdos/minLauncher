@@ -25,6 +25,16 @@ class SettingsService {
     await _update('use_icons', newUseIcons ? 'true' : 'false');
   }
 
+  /// Loads the User's preferred Search Depth from the database.
+  Future<int> searchDepth() async {
+    return int.parse(await _get('search_depth', '0'));
+  }
+
+  /// Persists the user's preferred Search Depth to the database.
+  Future<void> updateSearchDepth(int newSearchDepth) async {
+    await _update('use_icons', newSearchDepth.toString());
+  }
+
   /// Loads the User's preferred Locale from the database.
   Future<Locale> locale() async {
     switch (await _get('locale', 'en')) {
@@ -80,11 +90,11 @@ class SettingsService {
 
   /// Loads the User's preferred Theme Data from the database.
   Future<ThemeData> themeData() async => ThemeData.from(
-    colorScheme: ColorScheme.fromSeed(seedColor: Colors.orangeAccent),
-    useMaterial3: true,
-  );
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.orangeAccent),
+        useMaterial3: true,
+      );
 
-  /// Retrieve a given setting's value from the database. 
+  /// Retrieve a given setting's value from the database.
   /// If it doesn't exists the given defaultValue gets stored
   /// and returned.
   Future<String> _get(String key, String defaultValue) async {

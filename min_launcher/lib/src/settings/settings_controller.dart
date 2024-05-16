@@ -13,7 +13,7 @@ class SettingsController with ChangeNotifier {
   // Make SettingsService a private variable so it is not used directly.
   final SettingsService _settingsService;
 
-  /// Currently passed by the PackageSearchController. When called 
+  /// Currently passed by the PackageSearchController. When called
   /// requests to load the packages.
   final void Function()? requestLoad;
 
@@ -26,6 +26,7 @@ class SettingsController with ChangeNotifier {
     _themeMode = await _settingsService.themeMode();
     _themeData = await _settingsService.themeData();
     _useIcons = await _settingsService.useIcons();
+    _searchDepth = await _settingsService.searchDepth();
     _locale = await _settingsService.locale();
     _appsAlign = await _settingsService.appsAlign();
 
@@ -40,6 +41,7 @@ class SettingsController with ChangeNotifier {
   late ThemeMode _themeMode;
   late ThemeData _themeData;
   late bool _useIcons;
+  late int _searchDepth;
   late Locale _locale;
   late TextAlign _appsAlign;
 
@@ -47,6 +49,7 @@ class SettingsController with ChangeNotifier {
   ThemeMode get themeMode => _themeMode;
   ThemeData get themeData => _themeData;
   bool get useIcons => _useIcons;
+  int get searchDepth => _searchDepth;
   Locale get locale => _locale;
   TextAlign get appsAlign => _appsAlign;
 
@@ -57,6 +60,15 @@ class SettingsController with ChangeNotifier {
     _useIcons = newUseIcons;
     notifyListeners();
     await _settingsService.updateUseIcons(newUseIcons);
+  }
+
+  /// Update and persist the Search Depth based on the user's selection.
+  Future<void> updateSearchDepth(int? newSearchDepth) async {
+    if (newSearchDepth == null) return;
+    if (newSearchDepth == _searchDepth) return;
+    _searchDepth = newSearchDepth.clamp(0, 5);
+    notifyListeners();
+    await _settingsService.updateSearchDepth(newSearchDepth);
   }
 
   /// Update and persist the Locale based on the user's selection.

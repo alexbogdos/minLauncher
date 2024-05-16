@@ -15,6 +15,8 @@
     "@_SETTINGS_VIEW": {},
 
     "settingsTitle": "Settings",
+    "settingsCategoryGlobal": "Global",
+    "settingsCategoryDrawer": "Drawer",
 
     "settingsToggleThemeModeTitle": "Theme mode",
     "settingsToggleThemeModeValueSystem": "System",
@@ -23,10 +25,12 @@
 
     "settingsToggleLocaleTitle": "Language",
 
-    "settingsToggleUseIconsTitle": "Show app icons",
+    "settingsToggleUseIconsTitle": "App icons",
 
     "settingsToggleAppsAlignTitle": "Apps Align",
     "settingsToggleAppsAlignValueLeft": "Left",
     "settingsToggleAppsAlignValueCenter": "Center",
-    "settingsToggleAppsAlignValueRight": "Right"
+    "settingsToggleAppsAlignValueRight": "Right",
+
+    "settingsToggleSearchDepthTitle": "Search depth"
 }

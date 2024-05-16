@@ -15,6 +15,8 @@
     "@_SETTINGS_VIEW": {},
 
     "settingsTitle": "Ρυθμίσεις",
+    "settingsCategoryGlobal": "Γενικές",
+    "settingsCategoryDrawer": "Συρτάρι",
 
     "settingsToggleThemeModeTitle": "Θέμα Εφαρμογής",
     "settingsToggleThemeModeValueSystem": "Συστήματος",
@@ -23,10 +25,12 @@
 
     "settingsToggleLocaleTitle": "Γλώσσα",
 
-    "settingsToggleUseIconsTitle": "Εφμάνιση εικονιδίων εφαρμογών",
+    "settingsToggleUseIconsTitle": "Εικονίδια εφαρμογών",
 
     "settingsToggleAppsAlignTitle": "Στοίχιση Εφαρμογών",
     "settingsToggleAppsAlignValueLeft": "Αριστερή",
     "settingsToggleAppsAlignValueCenter": "Κεντρική",
-    "settingsToggleAppsAlignValueRight": "Δεξία"
+    "settingsToggleAppsAlignValueRight": "Δεξία",
+
+    "settingsToggleSearchDepthTitle": "Βάθος αναζήτησης"
 }

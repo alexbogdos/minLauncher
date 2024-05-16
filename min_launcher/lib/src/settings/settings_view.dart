@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'settings_controller.dart';
-import 'settings_entry.dart';
+import 'widgets/settings_entries.dart';
+import 'widgets/settings_category.dart';
 
 /// Displays the various settings that can be customized by the user.
 ///
@@ -25,6 +26,9 @@ class SettingsView extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
         child: Column(
           children: [
+            SettingsCategory(
+              title: AppLocalizations.of(context)!.settingsCategoryGlobal,
+            ),
             SettingsEntry(
               title: AppLocalizations.of(context)!.settingsToggleThemeModeTitle,
               child: DropdownButton<ThemeMode>(
@@ -76,6 +80,10 @@ class SettingsView extends StatelessWidget {
                 ],
               ),
             ),
+            SettingsCategory(
+              title: AppLocalizations.of(context)!.settingsCategoryDrawer,
+              topPadding: 12,
+            ),
             SettingsEntry(
               title: AppLocalizations.of(context)!.settingsToggleUseIconsTitle,
               child: Switch(
@@ -90,7 +98,7 @@ class SettingsView extends StatelessWidget {
                 value: controller.appsAlign,
                 // Call the updateThemeMode method any time the user selects a theme.
                 onChanged: controller.updateAppsAlign,
-                items:  [
+                items: [
                   DropdownMenuItem(
                     value: TextAlign.left,
                     child: Text(AppLocalizations.of(context)!
@@ -106,6 +114,39 @@ class SettingsView extends StatelessWidget {
                     child: Text(AppLocalizations.of(context)!
                         .settingsToggleAppsAlignValueRight),
                   ),
+                ],
+              ),
+            ),
+            SettingsEntry(
+              title:
+                  AppLocalizations.of(context)!.settingsToggleSearchDepthTitle,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      controller.updateSearchDepth(controller.searchDepth - 1);
+                    },
+                    style: TextButton.styleFrom(
+                      minimumSize: const Size(40, 40),
+                    ),
+                    child: const Text("-"),
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    controller.searchDepth.toString(),
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  const SizedBox(width: 4),
+                  TextButton(
+                    onPressed: () {
+                      controller.updateSearchDepth(controller.searchDepth + 1);
+                    },
+                    style: TextButton.styleFrom(
+                      minimumSize: const Size(40, 40),
+                    ),
+                    child: const Text("+"),
+                  )
                 ],
               ),
             ),
